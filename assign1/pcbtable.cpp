@@ -17,13 +17,17 @@
 PCBTable::PCBTable(int size) 
 {
    // TODO: add your code here
+   table = new vector<PCB*>; //allocate our vector of PCB pointers
+
+
 }
 
 /**
  * @brief Destroy the PCBTable object. Make sure to delete all the PCBs in the table.
  *
  */
-PCBTable::~PCBTable() {
+PCBTable::~PCBTable() 
+{
    // TODO: add your code here
    // Delete all the PCBs in the table
 }
@@ -34,7 +38,8 @@ PCBTable::~PCBTable() {
  * @param idx: the index of the PCB to get
  * @return PCB*: pointer to the PCB at index "idx"
  */
-PCB* PCBTable::getPCB(unsigned int idx) {
+PCB* PCBTable::getPCB(unsigned int idx) 
+{
     // TODO: add your code here
     return NULL;
 }
