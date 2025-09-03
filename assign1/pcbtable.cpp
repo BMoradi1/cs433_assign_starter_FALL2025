@@ -17,8 +17,8 @@
 PCBTable::PCBTable(int size) 
 {
    // TODO: add your code here
-   table = new vector<PCB*>; //allocate our vector of PCB pointers
-
+   //table = new vector<PCB*>; //allocate our vector of PCB pointers
+    tableSize = size;
 
 }
 
@@ -30,6 +30,11 @@ PCBTable::~PCBTable()
 {
    // TODO: add your code here
    // Delete all the PCBs in the table
+   while(!table.empty())
+   {
+        delete table.back();
+        table.pop_back();
+   }
 }
 
 /**
@@ -40,8 +45,8 @@ PCBTable::~PCBTable()
  */
 PCB* PCBTable::getPCB(unsigned int idx) 
 {
-    // TODO: add your code here
-    return NULL;
+    
+    return table[idx];
 }
 
 /**
@@ -52,4 +57,5 @@ PCB* PCBTable::getPCB(unsigned int idx)
 void PCBTable::addPCB(PCB *pcb, unsigned int idx) {
     // TODO: add your code here
     // Add a PCB pointer to the PCBTable at index idx.
+    table.insert(table.begin() + idx, pcb);
 }
