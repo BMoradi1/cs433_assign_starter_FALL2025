@@ -8,6 +8,7 @@
  */
 
 #include "pcbtable.h"
+#include <vector>
 
 /**
  * @brief Construct a new PCBTable object of the given size (number of PCBs)
@@ -16,8 +17,9 @@
  */
 PCBTable::PCBTable(int size) 
 {
+    
    // TODO: add your code here
-   table = new vector<PCB*>; //allocate our vector of PCB pointers
+    std::vector<PCB*> table; //allocate our vector of PCB pointers
     tableSize = size;
 
 }
@@ -35,6 +37,7 @@ PCBTable::~PCBTable()
         delete table.back();
         table.pop_back();
    }
+   table.clear();
 }
 
 /**
