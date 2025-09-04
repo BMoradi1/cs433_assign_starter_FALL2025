@@ -1,7 +1,7 @@
 /**
  * Assignment 1: priority queue of processes
  * @file pcbtable.h
- * @author Bijan Moradi, Bryn Grofcsik (TODO: your name)
+ * @author Bijan Moradi, Bryn Grofcsik 
  * @brief This is the implementation file for the PCBTable class.
  * //You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
  * // Remember to add sufficient comments to your code
@@ -17,7 +17,7 @@
 PCBTable::PCBTable(int size) 
 {
    // TODO: add your code here
-   //table = new vector<PCB*>; //allocate our vector of PCB pointers
+   table = new vector<PCB*>; //allocate our vector of PCB pointers
     tableSize = size;
 
 }
