@@ -32,8 +32,8 @@ PCBTable::~PCBTable()
    // Delete all the PCBs in the table
    while(!table.empty())
    {
-        delete table.back();
-        table.pop_back();
+        delete table.back(); //delete the object at the back of the table vector
+        table.pop_back(); //remove the pointer from the table vectro
    }
 }
 
