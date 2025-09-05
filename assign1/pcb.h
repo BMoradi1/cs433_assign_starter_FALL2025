@@ -56,7 +56,7 @@ public:
      * @return unsigned int: the ID of the PCB
      */
     unsigned int getID() {
-        return this->id;
+        return id;
     }
 
     /**
@@ -65,7 +65,7 @@ public:
      * @return unsigned int: the priority of the PCB
      */
     unsigned int getPriority() {
-        return this->priority;
+        return priority;
     }
 
     /**
@@ -74,15 +74,15 @@ public:
      * @return ProcState: the state of the PCB
      */
     ProcState getState() {
-        return this->state;
-      }
+        return state;
+    }
 
     /**
      * @brief Change the state of the PCB.
      * @param state
      */
     void setState(ProcState state) {
-        this->state = state;
+        // TODO: add your code here
     }
 
     /**
@@ -90,7 +90,7 @@ public:
      * @param priority
      */
     void setPriority(unsigned int priority) {
-        this->priority = priority;
+        // TODO: add your code here
     }
 
     /**
