@@ -37,6 +37,9 @@ ReadyQueue::~ReadyQueue() {
 
  void ReadyQueue::percolateUp(int index){
    
+    int upParent = parent(index);
+
+    if()
  }
 
  void ReadyQueue::percolateDown(int index){
@@ -51,6 +54,11 @@ ReadyQueue::~ReadyQueue() {
 
      if (currPrior < leftPrior && leftPrior > rightPrior && leftChild(index) <= count){ //if the index's value is less that its left child, and the left is greater than the right, and the left is not out of bounds, swap.
   swap(index, leftChild(index));
+    percolateDown(index);
+  }
+
+  else if(currPrior < rightPrior && rightChild(index) <= count){
+    swap(index, rightChild(index));
     percolateDown(index);
   }
  }  
