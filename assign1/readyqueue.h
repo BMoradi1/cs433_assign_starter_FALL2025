@@ -36,7 +36,15 @@ public:
      */
     ~ReadyQueue();
 
-    ReadyQueue(PCB **values, int length);
+    ReadyQueue(PCB **values, int count, int length);
+
+    void percolateUp(int index);
+
+    void percolateDown(int index);
+
+    int leftChild(int index) { return 2 * index + 1; }
+    int rightChild(int index) { return 2 * index + 2; };
+
 
     // You may add additional member functions, but don't change the definitions of the following four member functions.
 
@@ -61,9 +69,11 @@ public:
      */
 	int size();
 
-     /**
-      * @brief Display the PCBs in the queue.
-      */
+    void swap(int index1, int index2);
+
+    /**
+     * @brief Display the PCBs in the queue.
+     */
 	void displayAll();
 
 };

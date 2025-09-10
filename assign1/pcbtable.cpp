@@ -21,6 +21,7 @@ PCBTable::PCBTable(int size)
    // TODO: add your code here
     table = new std::vector<PCB*> ; //allocate our vector of PCB pointers
     tableSize = size;
+    count = 0;
 
 }
 
@@ -61,4 +62,5 @@ void PCBTable::addPCB(PCB *pcb, unsigned int idx) {
     // TODO: add your code here
     // Add a PCB pointer to the PCBTable at index idx.
     table -> insert(table -> begin() + idx, pcb);
+    count++;
 }

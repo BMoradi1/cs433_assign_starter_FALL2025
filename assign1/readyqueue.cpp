@@ -29,10 +29,31 @@ ReadyQueue::~ReadyQueue() {
  * @brief constructor to build a heap from the table
  */
 
- ReadyQueue::ReadyQueue(PCB **values, int length){
+ ReadyQueue::ReadyQueue(PCB **values, int count, int length){
     this->capacity = length;
     this->heaparray = values;
+    this->count = count;
  }
+
+ void ReadyQueue::percolateUp(int index){
+   
+ }
+
+ void ReadyQueue::percolateDown(int index){
+
+   PCB* current = heaparray[index];
+   PCB* left = heaparray[leftChild(index)];
+   PCB* right = heaparray[rightChild(index)];
+
+   int currPrior = current->priority;
+   int leftPrior = left->priority;
+   int rightPrior = right->priority;
+
+     if (currPrior < leftPrior && leftPrior > rightPrior && leftChild(index) <= count){ //if the index's value is less that its left child, and the left is greater than the right, and the left is not out of bounds, swap.
+  swap(index, leftChild(index));
+    percolateDown(index);
+  }
+ }  
 
 /**
  * @brief Add a PCB representing a process into the ready queue.
@@ -63,9 +84,19 @@ int ReadyQueue::size() {
     //TODO: add your code here
 }
 
+void ReadyQueue::swap(int index1, int index2){
+    PCB* temp = heaparray[index1];
+    heaparray[index1] = heaparray[index2];
+    heaparray[index2] = temp;
+}
+
 /**
  * @brief Display the PCBs in the queue.
  */
 void ReadyQueue::displayAll() {
-    //TODO: add your code here
+int i;
+  cout << "[ ";
+  for (i = 0; i < count; i++)
+  cout << heaparray[i] << " ";
+  cout << "]\n";
 }
