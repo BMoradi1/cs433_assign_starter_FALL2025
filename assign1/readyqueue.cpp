@@ -10,8 +10,11 @@ using namespace std;
 /**
  * @brief Constructor for the ReadyQueue class.
  */
- ReadyQueue::ReadyQueue()  {
+ ReadyQueue::ReadyQueue(int size)  {
      //TODO: add your code here
+    capacity = size;
+    heaparray = new PCB*[size];
+    count = 0;
  }
 
 /**
@@ -19,7 +22,17 @@ using namespace std;
 */
 ReadyQueue::~ReadyQueue() {
     //TODO: add your code to release dynamically allocate memory
+    delete[] heaparray;
 }
+
+/**
+ * @brief constructor to build a heap from the table
+ */
+
+ ReadyQueue::ReadyQueue(PCB **values, int length){
+    this->capacity = length;
+    this->heaparray = values;
+ }
 
 /**
  * @brief Add a PCB representing a process into the ready queue.

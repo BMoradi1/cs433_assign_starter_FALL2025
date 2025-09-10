@@ -20,20 +20,25 @@ class ReadyQueue {
 private:
     // TODO: add your private member variables here
     // choose a data structure for the ReadyQueue. No STL class is allowed.
+    PCB **heaparray;
+    int capacity;
+    int count;
 
 public:
     /**
      * @brief Construct a new ReadyQueue object
      *
      */
-    ReadyQueue();
+    ReadyQueue(int capacity = 100);
 
     /**
      * @brief Destructor
      */
     ~ReadyQueue();
 
-	// You may add additional member functions, but don't change the definitions of the following four member functions.
+    ReadyQueue(PCB **values, int length);
+
+    // You may add additional member functions, but don't change the definitions of the following four member functions.
 
     /**
      * @brief Add a PCB representing a process into the ready queue.

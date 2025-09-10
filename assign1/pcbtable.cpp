@@ -37,7 +37,7 @@ PCBTable::~PCBTable()
         delete table -> back(); //delete the object at the back of the table vector
         table -> pop_back(); //remove the pointer from the table vectro
    }
-   table -> clear();
+   table -> clear(); //deallocates the table
 }
 
 /**
