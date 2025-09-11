@@ -30,6 +30,7 @@ ReadyQueue::~ReadyQueue() {
  */
 
  ReadyQueue::ReadyQueue(PCB **values, int count, int length){
+    printf("Constructor");
     this->capacity = length;
     this->heaparray = values;
     this->count = count;
@@ -52,6 +53,11 @@ void ReadyQueue::heapify()
 }
 
  void ReadyQueue::percolateUp(int index){
+//    printf("PercolateUP");
+    if(index == 0) //we hit the root
+  {
+    return; //break out of recursion
+  }
 
     PCB* current = heaparray[index];
     PCB* parent = heaparray[getParent(index)];
@@ -63,11 +69,11 @@ void ReadyQueue::heapify()
       swap(index, getParent(index));
 
       percolateUp(getParent(index));
-      displayAll();
     }
  }
 
  void ReadyQueue::percolateDown(int index){
+//  printf("PercolateDown");
 
    PCB* current = heaparray[index];
    PCB* left = heaparray[getLeft(index)];
@@ -94,6 +100,7 @@ void ReadyQueue::heapify()
  * @param pcbPtr: the pointer to the PCB to be added
  */
 void ReadyQueue::addPCB(PCB *pcbPtr) {
+   // printf("Add");
        if(count == capacity) //array is full, we need to resize
     {
         PCB** newHeap = new PCB*[capacity + 1]; //add a slot for the element
@@ -114,6 +121,7 @@ void ReadyQueue::addPCB(PCB *pcbPtr) {
 }
 
 void ReadyQueue::swap(int index1, int index2){
+  //printf("swap");
     PCB* temp = heaparray[index1];
     heaparray[index1] = heaparray[index2];
     heaparray[index2] = temp;
