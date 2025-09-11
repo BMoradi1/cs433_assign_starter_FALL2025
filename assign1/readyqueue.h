@@ -38,6 +38,8 @@ public:
 
     ReadyQueue(PCB **values, int count, int length);
 
+    void heapify();
+
     void percolateUp(int index);
 
     void percolateDown(int index);

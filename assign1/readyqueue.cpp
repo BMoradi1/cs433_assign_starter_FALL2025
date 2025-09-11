@@ -33,7 +33,23 @@ ReadyQueue::~ReadyQueue() {
     this->capacity = length;
     this->heaparray = values;
     this->count = count;
+
+      for(int i = 0; i < length; i++)
+  {
+    this->heaparray[i] = values[i];
+  }
+
+  this -> heapify(); //restore the heap property.
  }
+
+void ReadyQueue::heapify() 
+{
+  // TODO: Organize the heap values by percolating through the heap
+  for(int i = (count/2) - 1; i >= 0; i-- ) //start from last non leaf node
+  {
+    percolateDown(i); //pecholate the heap 
+  }
+}
 
  void ReadyQueue::percolateUp(int index){
 
