@@ -42,11 +42,11 @@ public:
 
     void percolateDown(int index);
 
-    int leftChild(int index) { return 2 * index + 1; };
+    int getLeft(int index) { return 2 * index + 1; };
     
-    int rightChild(int index) { return 2 * index + 2; };
+    int getRight(int index) { return 2 * index + 2; };
 
-    int parent(int index){
+    int getParent(int index){
         if (index <= 0 || index >= count){
         return -1;
         }

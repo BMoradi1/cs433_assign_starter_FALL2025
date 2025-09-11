@@ -36,29 +36,37 @@ ReadyQueue::~ReadyQueue() {
  }
 
  void ReadyQueue::percolateUp(int index){
-   
-    int upParent = parent(index);
 
-    if()
+    PCB* current = heaparray[index];
+    PCB* parent = heaparray[getParent(index)];
+ 
+    int currPrior = current->priority;
+    int parentPrior = parent->priority;
+
+    if(currPrior > parentPrior && getParent(index) >= 0){
+      swap(index, getParent(index));
+
+      percolateUp(getParent(index));
+    }
  }
 
  void ReadyQueue::percolateDown(int index){
 
    PCB* current = heaparray[index];
-   PCB* left = heaparray[leftChild(index)];
-   PCB* right = heaparray[rightChild(index)];
+   PCB* left = heaparray[getLeft(index)];
+   PCB* right = heaparray[getRight(index)];
 
    int currPrior = current->priority;
    int leftPrior = left->priority;
    int rightPrior = right->priority;
 
-     if (currPrior < leftPrior && leftPrior > rightPrior && leftChild(index) <= count){ //if the index's value is less that its left child, and the left is greater than the right, and the left is not out of bounds, swap.
-  swap(index, leftChild(index));
+     if (currPrior < leftPrior && leftPrior > rightPrior && getRight(index) <= count){ //if the index's value is less that its left child, and the left is greater than the right, and the left is not out of bounds, swap.
+  swap(index, getLeft(index));
     percolateDown(index);
   }
 
-  else if(currPrior < rightPrior && rightChild(index) <= count){
-    swap(index, rightChild(index));
+  else if(currPrior < rightPrior && getRight(index) <= count){
+    swap(index, getRight(index));
     percolateDown(index);
   }
  }  
@@ -69,8 +77,29 @@ ReadyQueue::~ReadyQueue() {
  * @param pcbPtr: the pointer to the PCB to be added
  */
 void ReadyQueue::addPCB(PCB *pcbPtr) {
-    //TODO: add your code here
-    // When adding a PCB to the queue, you must change its state to READY.
+       if(count == capacity) //array is full, we need to resize
+    {
+        PCB** newHeap = new PCB*[capacity + 1]; //add a slot for the element
+        for (int i = 0; i < count; i++)//loop to copy elements to new array
+        {
+            newHeap[i] = heaparray[i];
+        }
+        delete[] heaparray; //delete old heap array
+        heaparray = newHeap; 
+        capacity = capacity + 1; //account for the new slot
+    }
+    heaparray[count] = pcbPtr; //insert the value
+    count++; //increment the count since we have a new element
+    percolateUp(count - 1); // restore heap structure
+  // TODO: resize the Heap array if neccessary and insert the value into the
+  // heap.
+  // TODO: percolate the Heap to rearange after th
+}
+
+void ReadyQueue::swap(int index1, int index2){
+    PCB* temp = heaparray[index1];
+    heaparray[index1] = heaparray[index2];
+    heaparray[index2] = temp;
 }
 
 /**
@@ -81,6 +110,18 @@ void ReadyQueue::addPCB(PCB *pcbPtr) {
 PCB* ReadyQueue::removePCB() {
     //TODO: add your code here
     // When removing a PCB from the queue, you must change its state to RUNNING.
+    if (count == 0){
+      return NULL;
+    }
+    PCB* min = heaparray[0];
+
+    heaparray[0] = heaparray[count - 1];
+    count--;
+    if(count > 1){
+      percolateDown(0);
+    }
+    min -> setState(ProcState::RUNNING);
+    return min;
 }
 
 /**
@@ -89,14 +130,9 @@ PCB* ReadyQueue::removePCB() {
  * @return int: the number of PCBs in the queue
  */
 int ReadyQueue::size() {
-    //TODO: add your code here
+    return count;
 }
 
-void ReadyQueue::swap(int index1, int index2){
-    PCB* temp = heaparray[index1];
-    heaparray[index1] = heaparray[index2];
-    heaparray[index2] = temp;
-}
 
 /**
  * @brief Display the PCBs in the queue.
