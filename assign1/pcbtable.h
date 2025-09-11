@@ -8,7 +8,7 @@
 //You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
 // Remember to add sufficient and clear comments to your code
 #pragma once
-
+#include <vector>
 #include "pcb.h"
 
 /**
@@ -21,8 +21,7 @@ private:
     // choose a data structure for the PCBTable. 
     // You can use an array of PCB pointers, e.g. vector<PCB *>. 
     int tableSize;
-    int count;
-    vector<PCB*>* table; //Our vector of PCB object pointers
+    vector<PCB*> table; //Our vector of PCB object pointers
 
 public:
     /**

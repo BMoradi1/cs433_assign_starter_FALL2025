@@ -29,7 +29,7 @@ public:
      * @brief Construct a new ReadyQueue object
      *
      */
-    ReadyQueue(int capacity = 100);
+    ReadyQueue();
 
     /**
      * @brief Destructor

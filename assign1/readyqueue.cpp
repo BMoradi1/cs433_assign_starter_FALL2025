@@ -10,10 +10,10 @@ using namespace std;
 /**
  * @brief Constructor for the ReadyQueue class.
  */
- ReadyQueue::ReadyQueue(int size)  {
+ ReadyQueue::ReadyQueue()  {
      //TODO: add your code here
-    capacity = size;
-    heaparray = new PCB*[size];
+    int capacity = 100;
+    heaparray = new PCB*[capacity];
     count = 0;
  }
 
@@ -47,6 +47,7 @@ ReadyQueue::~ReadyQueue() {
       swap(index, getParent(index));
 
       percolateUp(getParent(index));
+      displayAll();
     }
  }
 
@@ -138,9 +139,12 @@ int ReadyQueue::size() {
  * @brief Display the PCBs in the queue.
  */
 void ReadyQueue::displayAll() {
-int i;
-  cout << "[ ";
+  int i;
+  //cout << "[ ";
   for (i = 0; i < count; i++)
-  cout << heaparray[i] << " ";
-  cout << "]\n";
+  {
+    //cout << " ";
+    heaparray[i] -> display();
+  }
+  //cout << "]\n";
 }
