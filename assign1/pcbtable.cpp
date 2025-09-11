@@ -60,9 +60,11 @@ PCB* PCBTable::getPCB(unsigned int idx)
 void PCBTable::addPCB(PCB *pcb, unsigned int idx) {
     // TODO: add your code here
     // Add a PCB pointer to the PCBTable at index idx.
+    
     if(idx > table.size())
     {
         idx = table.size();
     }
     table.insert(table.begin() + idx, pcb);
-}
+    cout << "Inserted PCB withp riority value:" << pcb -> getPriority()<< " into index: "<< idx <<endl;
+ }
