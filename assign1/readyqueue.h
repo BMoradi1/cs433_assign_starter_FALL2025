@@ -44,18 +44,6 @@ public:
 
     void percolateDown(int index);
 
-    int getLeft(int index) { return 2 * index + 1; };
-    
-    int getRight(int index) { return 2 * index + 2; };
-
-    int getParent(int index){
-        if (index <= 0 || index >= count){
-        return -1;
-        }
-        else{
-      return(index - 1)/2;
-        }
-    }
 
 
     // You may add additional member functions, but don't change the definitions of the following four member functions.

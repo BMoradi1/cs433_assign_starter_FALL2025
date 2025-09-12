@@ -30,7 +30,7 @@ ReadyQueue::~ReadyQueue() {
  */
 
  ReadyQueue::ReadyQueue(PCB **values, int count, int length){
-    printf("Constructor");
+    printf("Constructor\n");
     this->capacity = length;
     this->heaparray = values;
     this->count = count;
@@ -53,44 +53,49 @@ void ReadyQueue::heapify()
 }
 
  void ReadyQueue::percolateUp(int index){
-//    printf("PercolateUP");
+  //  printf("PercolateUP\n");
     if(index == 0) //we hit the root
   {
     return; //break out of recursion
   }
 
-    PCB* current = heaparray[index];
-    PCB* parent = heaparray[getParent(index)];
- 
-    int currPrior = current->priority;
-    int parentPrior = parent->priority;
+   if(index < 0 || index >= count)
+  { 
+    throw out_of_range("Index is out of range");
+  }
 
-    if(currPrior > parentPrior && getParent(index) >= 0){
-      swap(index, getParent(index));
+    if(heaparray[index]->getPriority() > heaparray[(index-1)/2]->getPriority()){
 
-      percolateUp(getParent(index));
-    }
+      swap(index, (index-1)/2);
+      percolateUp((index-1)/2);
+    } 
  }
 
  void ReadyQueue::percolateDown(int index){
 //  printf("PercolateDown");
+  // TODO: check the values at index in the heap and decide whether they need to
+  // be swapped. Run recursively until the current node is bigger than its
+  // children
 
-   PCB* current = heaparray[index];
-   PCB* left = heaparray[getLeft(index)];
-   PCB* right = heaparray[getRight(index)];
-
-   int currPrior = current->priority;
-   int leftPrior = left->priority;
-   int rightPrior = right->priority;
-
-     if (currPrior < leftPrior && leftPrior > rightPrior && getRight(index) <= count){ //if the index's value is less that its left child, and the left is greater than the right, and the left is not out of bounds, swap.
-  swap(index, getLeft(index));
-    percolateDown(index);
+  if(index < 0 || index >= count)
+  { 
+    throw out_of_range("Index is out of akerange");
   }
 
-  else if(currPrior < rightPrior && getRight(index) <= count){
-    swap(index, getRight(index));
-    percolateDown(index);
+  int largestChildIndex = index;
+
+  if(2*index+1 < count && heaparray[2*index+1] -> getPriority() > heaparray[largestChildIndex] -> getPriority()) //check if its within heap bounds, then check if its larger than parent
+  {
+    largestChildIndex = 2*index+1; //its bigger so set the largest child index
+  } 
+  if(2*index+2 < count &&  heaparray[2*index+2] -> getPriority() > heaparray[largestChildIndex] -> getPriority()) //now we check it with the right child
+  {
+    largestChildIndex = 2*index+2; //right child bigger than left child and bigger than index. set it
+  }
+  if(largestChildIndex != index) //check if index and children were in the right order. if largest child index change then they were not. Recurse.
+  {
+    swap(index, largestChildIndex); //its smaller, lets swap
+    percolateDown(largestChildIndex); //recursive call
   }
  }  
 
@@ -102,6 +107,7 @@ void ReadyQueue::heapify()
 void ReadyQueue::addPCB(PCB *pcbPtr) {
    //printf("Addding PCB With Priority:");
    //cout << pcbPtr -> getPriority() << endl;
+      pcbPtr -> setState(ProcState::READY);
        if(count == capacity) //array is full, we need to resize
     {
         PCB** newHeap = new PCB*[capacity * 2]; //add a slot for the element
@@ -122,7 +128,7 @@ void ReadyQueue::addPCB(PCB *pcbPtr) {
 }
 
 void ReadyQueue::swap(int index1, int index2){
-  //printf("swap");
+ // printf("swap\n");
     PCB* temp = heaparray[index1];
     heaparray[index1] = heaparray[index2];
     heaparray[index2] = temp;
@@ -135,14 +141,16 @@ void ReadyQueue::swap(int index1, int index2){
  */
 PCB* ReadyQueue::removePCB() {
     //TODO: add your code here
+  //  printf("remove\n");
     // When removing a PCB from the queue, you must change its state to RUNNING.
     if (count == 0){
       return NULL;
     }
     PCB* min = heaparray[0];
 
-    heaparray[0] = heaparray[count - 1];
+    heaparray[0] = heaparray[count - 1]; 
     count--;
+
     if(count > 1){
       percolateDown(0);
     }
@@ -164,6 +172,7 @@ int ReadyQueue::size() {
  * @brief Display the PCBs in the queue.
  */
 void ReadyQueue::displayAll() {
+  cout << "Display Processes in ReadyQueue: " << endl;
   int i;
   //cout << "[ ";
   for (i = 0; i < count; i++)
