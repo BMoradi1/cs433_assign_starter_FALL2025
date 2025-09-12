@@ -100,8 +100,8 @@ void ReadyQueue::heapify()
  * @param pcbPtr: the pointer to the PCB to be added
  */
 void ReadyQueue::addPCB(PCB *pcbPtr) {
-   printf("Addding PCB With Priority:");
-   cout << pcbPtr -> getPriority() << endl;
+   //printf("Addding PCB With Priority:");
+   //cout << pcbPtr -> getPriority() << endl;
        if(count == capacity) //array is full, we need to resize
     {
         PCB** newHeap = new PCB*[capacity * 2]; //add a slot for the element

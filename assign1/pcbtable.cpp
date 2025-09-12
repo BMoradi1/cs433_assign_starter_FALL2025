@@ -19,9 +19,8 @@ PCBTable::PCBTable(int size)
 {
     
    // TODO: add your code here
-  std::vector<PCB*> table; //allocate our vector of PCB pointers
-  tableSize = size;
-
+ // std::vector<PCB*> table; //allocate our vector of PCB pointers
+  table.resize(size);
 }
 
 /**
