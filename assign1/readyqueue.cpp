@@ -6,13 +6,13 @@ using namespace std;
 //You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
 // Remember to add sufficient comments to your code
 
-
+int capacity;
 /**
  * @brief Constructor for the ReadyQueue class.
  */
  ReadyQueue::ReadyQueue()  {
      //TODO: add your code here
-    int capacity = 100;
+    capacity = 100;
     heaparray = new PCB*[capacity];
     count = 0;
  }
@@ -104,14 +104,14 @@ void ReadyQueue::addPCB(PCB *pcbPtr) {
    cout << pcbPtr -> getPriority() << endl;
        if(count == capacity) //array is full, we need to resize
     {
-        PCB** newHeap = new PCB*[capacity + 1]; //add a slot for the element
+        PCB** newHeap = new PCB*[capacity * 2]; //add a slot for the element
         for (int i = 0; i < count; i++)//loop to copy elements to new array
         {
             newHeap[i] = heaparray[i];
         }
         delete[] heaparray; //delete old heap array
         heaparray = newHeap; 
-        capacity = capacity + 1; //account for the new slot
+        capacity = capacity * 2; //account for the new slot
     }
     heaparray[count] = pcbPtr; //insert the value
     count++; //increment the count since we have a new element
