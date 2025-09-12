@@ -65,5 +65,5 @@ void PCBTable::addPCB(PCB *pcb, unsigned int idx) {
         idx = table.size();
     }
     table.insert(table.begin() + idx, pcb);
-    cout << "Inserted PCB withp riority value:" << pcb -> getPriority()<< " into index: "<< idx <<endl;
+    //cout << "Inserted PCB with priority value:" << pcb -> getPriority()<< " into index: "<< idx <<endl;
  }
