@@ -53,7 +53,7 @@ void ReadyQueue::heapify()
   // TODO: Organize the heap values by percolating through the heap
   for(int i = (count/2) - 1; i >= 0; i-- ) //start from last non leaf node
   {
-    percolateDown(i); //pecholate the heap 
+    percolateDown(i); //percholate the heap
   }
 }
 
