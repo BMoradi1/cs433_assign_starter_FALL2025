@@ -6,11 +6,14 @@ using namespace std;
 //You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
 // Remember to add sufficient comments to your code
 
+//Reference: Heap code Bijan Moradi, CS311 Datastructures class Fall 2024.
+
 int capacity;
 /**
  * @brief Constructor for the ReadyQueue class.
  */
- ReadyQueue::ReadyQueue()  {
+ ReadyQueue::ReadyQueue()  
+ {
      //TODO: add your code here
     capacity = 100;
     heaparray = new PCB*[capacity];
@@ -20,7 +23,8 @@ int capacity;
 /**
  *@brief Destructor
 */
-ReadyQueue::~ReadyQueue() {
+ReadyQueue::~ReadyQueue() 
+{
     //TODO: add your code to release dynamically allocate memory
     delete[] heaparray;
 }
@@ -29,16 +33,17 @@ ReadyQueue::~ReadyQueue() {
  * @brief constructor to build a heap from the table
  */
 
- ReadyQueue::ReadyQueue(PCB **values, int count, int length){
-    printf("Constructor\n");
+ ReadyQueue::ReadyQueue(PCB **values, int count, int length)
+ {
+   // printf("Constructor\n");
     this->capacity = length;
     this->heaparray = values;
     this->count = count;
 
-      for(int i = 0; i < length; i++)
-  {
-    this->heaparray[i] = values[i];
-  }
+  for(int i = 0; i < length; i++)
+    {
+      this->heaparray[i] = values[i];
+    }
 
   this -> heapify(); //restore the heap property.
  }
@@ -52,35 +57,32 @@ void ReadyQueue::heapify()
   }
 }
 
- void ReadyQueue::percolateUp(int index){
+ void ReadyQueue::percolateUp(int index)
+ {
   //  printf("PercolateUP\n");
     if(index == 0) //we hit the root
-  {
-    return; //break out of recursion
-  }
+    {
+      return; //break out of recursion
+    }
 
-   if(index < 0 || index >= count)
-  { 
-    throw out_of_range("Index is out of range");
-  }
+    if(index < 0 || index >= count)
+    { 
+      throw out_of_range("Index is out of range");
+    }
 
-    if(heaparray[index]->getPriority() > heaparray[(index-1)/2]->getPriority()){
-
+    if(heaparray[index]->getPriority() > heaparray[(index-1)/2]->getPriority()) //heap property not satisfied. 
+    {
       swap(index, (index-1)/2);
       percolateUp((index-1)/2);
     } 
  }
 
- void ReadyQueue::percolateDown(int index){
+ void ReadyQueue::percolateDown(int index)
+ {
 //  printf("PercolateDown");
   // TODO: check the values at index in the heap and decide whether they need to
   // be swapped. Run recursively until the current node is bigger than its
   // children
-
-  if(index < 0 || index >= count)
-  { 
-    throw out_of_range("Index is out of akerange");
-  }
 
   int largestChildIndex = index;
 
@@ -105,31 +107,31 @@ void ReadyQueue::heapify()
  * @param pcbPtr: the pointer to the PCB to be added
  */
 void ReadyQueue::addPCB(PCB *pcbPtr) {
+
    //printf("Addding PCB With Priority:");
    //cout << pcbPtr -> getPriority() << endl;
       pcbPtr -> setState(ProcState::READY);
        if(count == capacity) //array is full, we need to resize
-    {
-        PCB** newHeap = new PCB*[capacity * 2]; //add a slot for the element
-        for (int i = 0; i < count; i++)//loop to copy elements to new array
-        {
-            newHeap[i] = heaparray[i];
-        }
-        delete[] heaparray; //delete old heap array
-        heaparray = newHeap; 
-        capacity = capacity * 2; //account for the new slot
-    }
+      {
+          PCB** newHeap = new PCB*[capacity * 2]; //add a slot for the element
+          for (int i = 0; i < count; i++)//loop to copy elements to new array
+          {
+              newHeap[i] = heaparray[i];
+          }
+          delete[] heaparray; //delete old heap array
+          heaparray = newHeap; //set the array pointer to the new heap
+          capacity = capacity * 2; //account for the new slot
+      }
     heaparray[count] = pcbPtr; //insert the value
     count++; //increment the count since we have a new element
     percolateUp(count - 1); // restore heap structure
-  // TODO: resize the Heap array if neccessary and insert the value into the
-  // heap.
-  // TODO: percolate the Heap to rearange after th
+
 }
 
-void ReadyQueue::swap(int index1, int index2){
+void ReadyQueue::swap(int index1, int index2)
+{
  // printf("swap\n");
-    PCB* temp = heaparray[index1];
+    PCB* temp = heaparray[index1];//swap using a temp pointer placeholder
     heaparray[index1] = heaparray[index2];
     heaparray[index2] = temp;
 }
@@ -139,23 +141,24 @@ void ReadyQueue::swap(int index1, int index2){
  *
  * @return PCB*: the pointer to the PCB with the highest priority
  */
-PCB* ReadyQueue::removePCB() {
-    //TODO: add your code here
+PCB* ReadyQueue::removePCB() 
+{
   //  printf("remove\n");
     // When removing a PCB from the queue, you must change its state to RUNNING.
-    if (count == 0){
+    if (count == 0){ //Theres nothing to return, return null so we dont accidentally send back an undefined pointer
       return NULL;
     }
-    PCB* min = heaparray[0];
+    PCB* max = heaparray[0]; //because we have a max heap, the root node will be the maximum value
 
     heaparray[0] = heaparray[count - 1]; 
     count--;
 
-    if(count > 1){
+    if(count > 1) //if we still have more than one elements in the heap, we need to restore the heap property
+    {
       percolateDown(0);
     }
-    min -> setState(ProcState::RUNNING);
-    return min;
+    max -> setState(ProcState::RUNNING); //set state as per instructions
+    return max;
 }
 
 /**
@@ -163,7 +166,8 @@ PCB* ReadyQueue::removePCB() {
  *
  * @return int: the number of PCBs in the queue
  */
-int ReadyQueue::size() {
+int ReadyQueue::size() 
+{
     return count;
 }
 
@@ -171,11 +175,11 @@ int ReadyQueue::size() {
 /**
  * @brief Display the PCBs in the queue.
  */
-void ReadyQueue::displayAll() {
+void ReadyQueue::displayAll() 
+{
   cout << "Display Processes in ReadyQueue: " << endl;
-  int i;
   //cout << "[ ";
-  for (i = 0; i < count; i++)
+  for (int i = 0; i < count; i++) //cycle through all the remaining PCBs in the heap array
   {
     //cout << " ";
     heaparray[i] -> display();
