@@ -150,12 +150,12 @@ PCB* ReadyQueue::removePCB()
     }
     PCB* max = heaparray[0]; //because we have a max heap, the root node will be the maximum value
 
-    heaparray[0] = heaparray[count - 1]; 
+    heaparray[0] = heaparray[count - 1]; //set a new root
     count--;
 
-    if(count > 1) //if we still have more than one elements in the heap, we need to restore the heap property
+    if(count > 1) //if we still have more than one elements in the heap, we need to restore the heap property because we replaced the root node
     {
-      percolateDown(0);
+      percolateDown(0); 
     }
     max -> setState(ProcState::RUNNING); //set state as per instructions
     return max;
