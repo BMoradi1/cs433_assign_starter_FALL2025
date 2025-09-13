@@ -8,7 +8,7 @@ using namespace std;
 
 //Reference: Heap code Bijan Moradi, CS311 Datastructures class Fall 2024.
 
-int capacity;
+//int capacity;
 /**
  * @brief Constructor for the ReadyQueue class.
  */
