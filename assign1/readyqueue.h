@@ -35,9 +35,11 @@ public:
      * @brief Destructor
      */
     ~ReadyQueue();
-
+    
+    ReadyQueue(const ReadyQueue &queue);
+    
     ReadyQueue(PCB **values, int count, int length);
-
+    ReadyQueue &operator=(const ReadyQueue &queue);
     void heapify();
 
     void percolateUp(int index);

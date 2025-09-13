@@ -19,7 +19,31 @@ using namespace std;
     heaparray = new PCB*[capacity];
     count = 0;
  }
-
+/* copy constructor*/
+ ReadyQueue::ReadyQueue(const ReadyQueue &queue)
+ {
+    capacity = queue.capacity; //set the capacity
+    count = queue.count; //set our count.
+    heaparray = new PCB*[capacity];
+    for(int i = 0; i < queue.count; i++)
+    {
+      heaparray[i] = queue.heaparray[i];
+    }
+ }
+ReadyQueue &ReadyQueue::operator=(const ReadyQueue &queue)
+{
+  if(this == &queue) //make sures not the same object so we dont self reference it
+  {
+    return *this; //we can just return the pointer to this object since its the same.
+  }
+  delete[] heaparray; //delete the old memory so we dont have a leak
+  heaparray = new PCB*[capacity]; //set up our new heap array
+  for(int i = 0; i < queue.count; i++)
+  {
+    heaparray[i] = queue.heaparray[i]; //copy all the elements into it
+  }
+  return *this;
+}
 /**
  *@brief Destructor
 */
