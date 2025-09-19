@@ -39,11 +39,11 @@ int parse_command(char command[], char *args[]) {
   int argcount = 0;
   char *token = strtok(command, "   "); //first strtok gets the command
   cout << "Parsed Command:" << token << endl;
-  args[argcount] = token;
+  args[argcount] = token; //arg[0] contains the command
   argcount++;
   //command = token;
   while (token != NULL) //keep going until we hit the end of the string
-  { // we only continue while there is
+  { // we only continue while there is tokens left
     token = strtok(NULL, "   ");
     if(token != NULL) //dont increment timer and print token if the next token is null
     {
@@ -53,6 +53,7 @@ int parse_command(char command[], char *args[]) {
     }
   }
   cout << "There are: " << argcount << " Arguments"<< endl;
+  args[argcount] = NULL; //null terminator
   return argcount;//remove one argument because arg[0] is the command
 }
 
