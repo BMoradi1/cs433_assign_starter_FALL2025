@@ -38,18 +38,22 @@ int parse_command(char command[], char *args[]) {
   //
   int argcount = 0;
   char *token = strtok(command, "   "); //first strtok gets the command
-  cout << "Parsed Command: " << token << endl;
+  cout << "Parsed Command:" << token << endl;
+  args[argcount] = token;
+  argcount++;
+  //command = token;
   while (token != NULL) //keep going until we hit the end of the string
   { // we only continue while there is
     token = strtok(NULL, "   ");
     if(token != NULL) //dont increment timer and print token if the next token is null
     {
       cout << "Parsed ARG:" << token << endl;
+      args[argcount] = token;
       argcount++; //keep track of the number of arguments generated
     }
   }
   cout << "There are: " << argcount << " Arguments"<< endl;
-  return argcount;
+  return argcount;//remove one argument because arg[0] is the command
 }
 
 // TODO: Add additional functions if you need
@@ -75,7 +79,7 @@ int main(int argc, char *argv[]) {
     fgets(command, MAX_LINE, stdin);
     // Parse the input command
     int num_args = parse_command(command, args);
-
+    
     // TODO: Add your code for the implementation
     /**
      * After reading user input, the steps are:
@@ -83,6 +87,8 @@ int main(int argc, char *argv[]) {
      * (2) the child process will invoke execvp()
      * (3) parent will invoke wait() unless command included &
      */
+
+    
   }
   return 0;
 }
