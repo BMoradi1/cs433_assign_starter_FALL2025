@@ -71,6 +71,7 @@ int main(int argc, char *argv[]) {
   char command[MAX_LINE];       // the command that was entered
   char *args[MAX_LINE / 2 + 1]; // hold parsed out command line arguments
   int should_run = 1;           /* flag to determine when to exit program */
+  char **history[2][2]; //Stores our past command/argument 
 
   // TODO: Add additional variables for the implementation
   while (should_run) {
@@ -92,29 +93,35 @@ int main(int argc, char *argv[]) {
     cout << "Parsing input" << endl;
     // Parse the input command
     int num_args = parse_command(command, args);
+    history[0] = args[0],args
+
+    for (int i = 0; i < num_argsd; i++){
+    }
 
     cout << "Attempting execution" << endl;
-    
+    // Forking begins
     pid_t pid;
 
     pid = fork(); //Forking a child process
 
     if(pid < 0){
-     perror("Error, pid cannot be below 0"); //Error
+     perror("Error, pid cannot be below 0"); //Error, pid should never be below 0
      exit(EXIT_FAILURE);
     }
 
      else if(pid == 0){
-      cout << "I am a child process" << endl;
+      cout << "I am a child process" << endl; //Debug
       execvp(args[0], args); //Executes parsed arguments and is terminated by a null pointer
+      perror("Error, This line should not be reached");
       exit(EXIT_FAILURE); //This line should not be reached
     }
 
     else if(pid > 0){ 
-      if (strchr(args[0], '&')!=NULL){ //If there are no ampersands within the command
+      char last = strlen(args[0] - 1); //Grab the last char of the command
+      if (last != '&'){ //If the end of the command isnt an ampersand
       wait(NULL); //Wait for the child to finish
       }
-      cout << "I am a parent process" << endl;
+      cout << "I am a parent process" << endl; //Debug
       }
     return 0;
   }
