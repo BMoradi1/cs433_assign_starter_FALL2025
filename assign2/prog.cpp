@@ -9,7 +9,11 @@
 // You must complete the all parts marked as "TODO". Delete "TODO" after you are
 // done. Remember to add sufficient and clear comments to your code
 // Reference:
-// https://www.geeksforgeeks.org/cpp/strtok-strtok_r-functions-c-examples/
+// https://www.geeksforgeeks.org/cpp/strtok-strtok_r-functions-c-examples/ //
+// https://brennan.io/2015/01/16/write-a-shell-in-c/
+// https://www.geeksforgeeks.org/linux-unix/shell-scripting-test-command
+// https://www.geeksforgeeks.org/c/making-linux-shell-c/
+
 #include <complex>
 #include <cstring>
 #include <fcntl.h>
@@ -31,10 +35,6 @@ using namespace std;
  * @return int
  */
 int parse_command(char command[], char *args[]) {
-  //
-  // referenced
-  // https://www.geeksforgeeks.org/cpp/strtok-strtok_r-functions-c-examples/
-  //
   int argcount = 0;
   char *token = strtok(command, "   "); //first strtok gets the command
 
@@ -58,7 +58,7 @@ int parse_command(char command[], char *args[]) {
   return argcount;//remove one argument because arg[0] is the command
 }
 
-// TODO: Add additional functions if you need
+//TODO: Add additional functions if you need
 
 /**
  * @brief The main function of a simple UNIX Shell. You may add additional
@@ -74,7 +74,13 @@ int main(int argc, char *argv[]) {
 
   // TODO: Add additional variables for the implementation
   while (should_run) {
-
+    // TODO: Add your code for the implementation
+    /**
+     * After reading user input, the steps are:
+     * (1) fork a child process using fork()
+     * (2) the child process will invoke execvp()
+     * (3) parent will invoke wait() unless command included &
+     */
     if(argv[0])
     printf("osh>");
     fflush(stdout);
@@ -87,45 +93,30 @@ int main(int argc, char *argv[]) {
     // Parse the input command
     int num_args = parse_command(command, args);
 
-    // Basic Loop
-
-    for(int i = 0; i < num_args; i++){
-      cout << args[i] << " " << endl;
-    }
-
-    //NEED: basic function to grab file: through < and >
-
-    // TODO: Add your code for the implementation
-    /**
-     * After reading user input, the steps are:
-     * (1) fork a child process using fork()
-     * (2) the child process will invoke execvp()
-     * (3) parent will invoke wait() unless command included &
-     */
-    pid_t pid;
+    cout << "Attempting execution" << endl;
     
+    pid_t pid;
+
     pid = fork(); //Forking a child process
 
     if(pid < 0){
-     perror("lsh"); //Error
-      exit(EXIT_FAILURE);
+     perror("Error, pid cannot be below 0"); //Error
+     exit(EXIT_FAILURE);
     }
 
      else if(pid == 0){
       cout << "I am a child process" << endl;
-    //   execvp(cmd, args[]);
-      if(execvp(args[0], args) == -1){
-        perror("lsh"); //Error
-      }
-      exit(EXIT_FAILURE);
+      execvp(args[0], args); //Executes parsed arguments and is terminated by a null pointer
+      exit(EXIT_FAILURE); //This line should not be reached
     }
 
     else if(pid > 0){ 
+      if (strchr(args[0], '&')!=NULL){ //If there are no ampersands within the command
+      wait(NULL); //Wait for the child to finish
+      }
       cout << "I am a parent process" << endl;
-    }
-
-    //DEBUG: Simple exit for now to escape loop
-    return should_run = 0;
+      }
+    return 0;
   }
-  return 0;
 }
+
