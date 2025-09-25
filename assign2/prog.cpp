@@ -58,6 +58,19 @@ int parse_command(char command[], char *args[]) {
   return argcount;//remove one argument because arg[0] is the command
 }
 
+// Holds previous history {NOT TESTED}
+char* access_history(char *args[], int num_args){
+char *history = new char[MAX_LINE];
+if (history[0] == NULL){
+  for (int i = 0; i < num_args; i++){
+    history[i] = *args[i];
+   }
+  cout << history[0] << endl;
+  cout << args[0] << endl;
+  }
+  return history;
+} 
+
 //TODO: Add additional functions if you need
 
 /**
@@ -71,7 +84,7 @@ int main(int argc, char *argv[]) {
   char command[MAX_LINE];       // the command that was entered
   char *args[MAX_LINE / 2 + 1]; // hold parsed out command line arguments
   int should_run = 1;           /* flag to determine when to exit program */
-  char **history[2][2]; //Stores our past command/argument 
+  int iteration = 0;            // Used for history function
 
   // TODO: Add additional variables for the implementation
   while (should_run) {
@@ -93,13 +106,24 @@ int main(int argc, char *argv[]) {
     cout << "Parsing input" << endl;
     // Parse the input command
     int num_args = parse_command(command, args);
-    history[0] = args[0],args
-
-    for (int i = 0; i < num_argsd; i++){
-    }
 
     cout << "Attempting execution" << endl;
     // Forking begins
+
+    //Checking for !! {NOT TESTED}
+    if(strcmp(args[0], "!!") == 0){
+      if(iteration != 0){ //making sure we dont try to access history on the first execution
+        char *history = new char[MAX_LINE];
+        history = access_history(args, num_args);
+          for (int i = 0; i < num_args; i++){
+            args[i] = &history[i];
+    }
+      }
+      else{
+        perror("History does not exist");
+        exit(EXIT_FAILURE);
+      }
+    }
     pid_t pid;
 
     pid = fork(); //Forking a child process
@@ -110,7 +134,7 @@ int main(int argc, char *argv[]) {
     }
 
      else if(pid == 0){
-      cout << "I am a child process" << endl; //Debug
+      cout << "I am a child process" << endl; //Debut
       execvp(args[0], args); //Executes parsed arguments and is terminated by a null pointer
       perror("Error, This line should not be reached");
       exit(EXIT_FAILURE); //This line should not be reached
@@ -118,11 +142,14 @@ int main(int argc, char *argv[]) {
 
     else if(pid > 0){ 
       char last = strlen(args[0] - 1); //Grab the last char of the command
+      //Ampersand check {NOT TESTED}
       if (last != '&'){ //If the end of the command isnt an ampersand
       wait(NULL); //Wait for the child to finish
       }
       cout << "I am a parent process" << endl; //Debug
       }
+    cout << "Iteration: " << iteration << endl;
+    iteration++;
     return 0;
   }
 }
