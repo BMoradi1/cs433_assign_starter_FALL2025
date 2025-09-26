@@ -59,14 +59,17 @@ int parse_command(char command[], char *args[]) {
 }
 
 // Holds previous history {NOT TESTED}
-char* access_history(char *args[], int num_args){
-char *history = new char[MAX_LINE];
-if (history[0] == NULL){
-  for (int i = 0; i < num_args; i++){
-    history[i] = *args[i];
-   }
-  cout << history[0] << endl;
-  cout << args[0] << endl;
+char* access_history(char *args[], int num_args)
+{
+  char *history = new char[MAX_LINE];
+  if (history[0] == NULL)
+  {
+    for (int i = 0; i < num_args; i++)
+    {
+      history[i] = *args[i];
+    }
+    cout << history[0] << endl;
+    cout << args[0] << endl;
   }
   return history;
 } 
