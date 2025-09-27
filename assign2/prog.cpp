@@ -13,6 +13,7 @@
 // https://brennan.io/2015/01/16/write-a-shell-in-c/
 // https://www.geeksforgeeks.org/linux-unix/shell-scripting-test-command
 // https://www.geeksforgeeks.org/c/making-linux-shell-c/
+// https://www.w3schools.com/cpp/cpp_vectors.asp
 
 #include <complex>
 #include <cstring>
