@@ -125,16 +125,16 @@ int main(int argc, char *argv[])
     {
       if(iteration != 0)
       { //making sure we dont try to access history on the first execution
-      //   char *history = new char[MAX_LINE];
-      //   history = access_history(args, num_args);
-      //     for (int i = 0; i < num_args; i++){
-      //       args[i] = &history[i];
-      // 
-        cout << "reading history: " <<endl;
-        for(int i = 0; i < history.size();i++)
-        {
-          cout << history[i] <<endl;
-        }
+        char *history = new char[MAX_LINE];
+        history = access_history(args, num_args);
+          for (int i = 0; i < num_args; i++){
+            args[i] = &history[i];
+          }
+        // cout << "reading history: " <<endl;
+        // for(int i = 0; i < history.size();i++)
+        // {
+        //   cout << history[i] <<endl;
+        // }
       }
       else
       {
