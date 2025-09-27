@@ -36,6 +36,7 @@ using namespace std;
  */
 int parse_command(char command[], char *args[]) {
   int argcount = 0;
+  char *commandog = new char[MAX_LINE];
   char *token = strtok(command, "   "); //first strtok gets the command
 
   cout << "Parsed Command:" << token << endl;
@@ -89,7 +90,8 @@ int main(int argc, char *argv[])
   char *args[MAX_LINE / 2 + 1]; // hold parsed out command line arguments
   int should_run = 1;           /* flag to determine when to exit program */
   int iteration = 0;            // Used for history function
-  char  history[MAX_LINE];
+  char  history[MAX_LINE]; //this will store the last executed command
+  char temp_command[MAX_LINE]; //this will preserve the command to put into the history after execution.
   // TODO: Add additional variables for the implementation
   while (should_run) {
     // TODO: Add your code for the implementation
@@ -106,6 +108,8 @@ int main(int argc, char *argv[])
     cout << "Reading input" << endl;
     // Read the input command
     fgets(command, MAX_LINE, stdin);
+    strcpy(temp_command,command); //we need to save the command temporarly because the parsing function is distructive to the og command string
+
     cout << "Parsing input" << endl;
     // Parse the input command
     int num_args = parse_command(command, args);
@@ -141,19 +145,22 @@ int main(int argc, char *argv[])
 
     pid = fork(); //Forking a child process
 
-    if(pid < 0){
+    if(pid < 0)
+    {
      perror("Error, pid cannot be below 0"); //Error, pid should never be below 0
      exit(EXIT_FAILURE);
     }
 
-     else if(pid == 0){
+     else if(pid == 0)
+     {
       //cout << "I am a child process" << endl; //Debut
       execvp(args[0], args); //Executes parsed arguments and is terminated by a null pointer
       perror("Error, This line should not be reached");
       exit(EXIT_FAILURE); //This line should not be reached
     }
 
-    else if(pid > 0){ 
+    else if(pid > 0)
+    { 
       char last = strlen(args[0] - 1); //Grab the last char of the command
       //Ampersand check {NOT TESTED}
       if (last != '&'){ //If the end of the command isnt an ampersand
@@ -162,7 +169,7 @@ int main(int argc, char *argv[])
       //cout << "I am a parent process" << endl; //Debug
       }
     cout << "Iteration: " << iteration << endl;
-    strcpy(history,command); //Save the last command
+    strcpy(history,temp_command); //Save the last command
     iteration++;
     //return 0;
   }
