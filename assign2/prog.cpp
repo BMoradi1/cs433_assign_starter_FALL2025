@@ -13,7 +13,6 @@
 // https://brennan.io/2015/01/16/write-a-shell-in-c/
 // https://www.geeksforgeeks.org/linux-unix/shell-scripting-test-command
 // https://www.geeksforgeeks.org/c/making-linux-shell-c/
-// https://www.w3schools.com/cpp/cpp_vectors.asp
 
 #include <complex>
 #include <cstring>
@@ -90,7 +89,7 @@ int main(int argc, char *argv[])
   char *args[MAX_LINE / 2 + 1]; // hold parsed out command line arguments
   int should_run = 1;           /* flag to determine when to exit program */
   int iteration = 0;            // Used for history function
-  vector<string> history;
+  char  history[MAX_LINE];
   // TODO: Add additional variables for the implementation
   while (should_run) {
     // TODO: Add your code for the implementation
@@ -107,16 +106,10 @@ int main(int argc, char *argv[])
     cout << "Reading input" << endl;
     // Read the input command
     fgets(command, MAX_LINE, stdin);
-    cout << "saving command to history" << endl;
-   
-    
     cout << "Parsing input" << endl;
     // Parse the input command
     int num_args = parse_command(command, args);
-    if(strcmp(args[0],"\n") != 0) //dont save blank commands in history
-    {
-      history.push_back(command);
-    }
+    
     cout << "Attempting execution" << endl;
     // Forking begins
 
@@ -125,16 +118,18 @@ int main(int argc, char *argv[])
     {
       if(iteration != 0)
       { //making sure we dont try to access history on the first execution
-        char *history = new char[MAX_LINE];
-        history = access_history(args, num_args);
-          for (int i = 0; i < num_args; i++){
-            args[i] = &history[i];
-          }
+      //   char *history = new char[MAX_LINE];
+      //   history = access_history(args, num_args);
+      //     for (int i = 0; i < num_args; i++){
+      //       args[i] = &history[i];
+      // 
         // cout << "reading history: " <<endl;
         // for(int i = 0; i < history.size();i++)
         // {
         //   cout << history[i] <<endl;
         // }
+       strcpy(command,history);
+       num_args = parse_command(command, args); //parse the new command from history
       }
       else
       {
@@ -167,6 +162,7 @@ int main(int argc, char *argv[])
       //cout << "I am a parent process" << endl; //Debug
       }
     cout << "Iteration: " << iteration << endl;
+    strcpy(history,command); //Save the last command
     iteration++;
     //return 0;
   }
