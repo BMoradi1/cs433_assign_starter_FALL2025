@@ -107,11 +107,15 @@ int main(int argc, char *argv[])
     // Read the input command
     fgets(command, MAX_LINE, stdin);
     cout << "saving command to history" << endl;
-    history.push_back(command);
+   
+    
     cout << "Parsing input" << endl;
     // Parse the input command
     int num_args = parse_command(command, args);
-
+    if(strcmp(args[0],"\n") != 0) //dont save blank commands in history
+    {
+      history.push_back(command);
+    }
     cout << "Attempting execution" << endl;
     // Forking begins
 
