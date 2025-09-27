@@ -21,7 +21,7 @@
 #include <stdio.h>
 #include <sys/wait.h>
 #include <unistd.h>
-
+#include <vector>
 using namespace std;
 
 #define MAX_LINE 80 // The maximum length command
@@ -83,12 +83,13 @@ char* access_history(char *args[], int num_args)
  * @param argv The array of arguments
  * @return The exit status of the program
  */
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) 
+{
   char command[MAX_LINE];       // the command that was entered
   char *args[MAX_LINE / 2 + 1]; // hold parsed out command line arguments
   int should_run = 1;           /* flag to determine when to exit program */
   int iteration = 0;            // Used for history function
-
+  vector<string> history;
   // TODO: Add additional variables for the implementation
   while (should_run) {
     // TODO: Add your code for the implementation
@@ -105,7 +106,8 @@ int main(int argc, char *argv[]) {
     cout << "Reading input" << endl;
     // Read the input command
     fgets(command, MAX_LINE, stdin);
-
+    cout << "saving command to history" << endl;
+    history.push_back(command);
     cout << "Parsing input" << endl;
     // Parse the input command
     int num_args = parse_command(command, args);
@@ -114,15 +116,23 @@ int main(int argc, char *argv[]) {
     // Forking begins
 
     //Checking for !! {NOT TESTED}
-    if(strcmp(args[0], "!!") == 0){
-      if(iteration != 0){ //making sure we dont try to access history on the first execution
-        char *history = new char[MAX_LINE];
-        history = access_history(args, num_args);
-          for (int i = 0; i < num_args; i++){
-            args[i] = &history[i];
-    }
+    if(strcmp(args[0], "!!") == 0)
+    {
+      if(iteration != 0)
+      { //making sure we dont try to access history on the first execution
+      //   char *history = new char[MAX_LINE];
+      //   history = access_history(args, num_args);
+      //     for (int i = 0; i < num_args; i++){
+      //       args[i] = &history[i];
+      // 
+        cout << "reading history: " <<endl;
+        for(int i = 0; i < history.size();i++)
+        {
+          cout << history[i] <<endl;
+        }
       }
-      else{
+      else
+      {
         perror("History does not exist");
         exit(EXIT_FAILURE);
       }
@@ -137,7 +147,7 @@ int main(int argc, char *argv[]) {
     }
 
      else if(pid == 0){
-      cout << "I am a child process" << endl; //Debut
+      //cout << "I am a child process" << endl; //Debut
       execvp(args[0], args); //Executes parsed arguments and is terminated by a null pointer
       perror("Error, This line should not be reached");
       exit(EXIT_FAILURE); //This line should not be reached
@@ -149,11 +159,11 @@ int main(int argc, char *argv[]) {
       if (last != '&'){ //If the end of the command isnt an ampersand
       wait(NULL); //Wait for the child to finish
       }
-      cout << "I am a parent process" << endl; //Debug
+      //cout << "I am a parent process" << endl; //Debug
       }
     cout << "Iteration: " << iteration << endl;
     iteration++;
-    return 0;
+    //return 0;
   }
 }
 
