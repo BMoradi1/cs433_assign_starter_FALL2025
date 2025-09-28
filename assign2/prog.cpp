@@ -35,6 +35,7 @@ using namespace std;
  * @return int
  */
 int parse_command(char command[], char *args[]) {
+
   int argcount = 0;
   char *commandog = new char[MAX_LINE];
   char *token = strtok(command, "   "); //first strtok gets the command
@@ -107,7 +108,13 @@ int main(int argc, char *argv[])
 
     cout << "Reading input" << endl;
     // Read the input command
+    cout << "I exist 0" << endl;
     fgets(command, MAX_LINE, stdin);
+    cout << "I exist 1" << endl;
+    int length = strlen(command);
+    command[length - 2] = NULL;
+    cout << "I exist 2" << length - 2 << endl;
+    cout << ":)" << command[length - 2] << endl;
     strcpy(temp_command,command); //we need to save the command temporarly because the parsing function is distructive to the og command string
 
     cout << "Parsing input" << endl;
@@ -133,6 +140,7 @@ int main(int argc, char *argv[])
         //   cout << history[i] <<endl;
         // }
        strcpy(command,history);
+       cout << "tets" << endl;
        num_args = parse_command(command, args); //parse the new command from history
       }
       else
