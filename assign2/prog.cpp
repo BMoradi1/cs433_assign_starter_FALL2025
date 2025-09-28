@@ -125,12 +125,12 @@ int main(int argc, char *argv[])
     cout << "Attempting execution" << endl;
     // Forking begins
 
-    //Checking for !! {NOT TESTED}
     if(strcmp(args[0],"exit") == 0)
     {
       should_run = false;
       break;
     }
+    //Checking for !! {NOT TESTED}
 
     else if(strcmp(args[0], "!!") == 0)
     {
