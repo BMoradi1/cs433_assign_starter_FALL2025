@@ -108,15 +108,16 @@ int main(int argc, char *argv[])
 
     cout << "Reading input" << endl;
     // Read the input command
-    cout << "I exist 0" << endl;
+    
     fgets(command, MAX_LINE, stdin);
-    cout << "I exist 1" << endl;
+    //cout << "I exist 1" << endl;
     int length = strlen(command);
-    command[length - 2] = NULL;
-    cout << "I exist 2" << length - 2 << endl;
-    cout << ":)" << command[length - 2] << endl;
+    if(command[length - 1] = '\n')
+      command[length - 1] = NULL; //remove trailing linebreak from fget.
+     // cout << "I exist 2" << length - 2 << endl;
+    //cout << ":)" << command[length - 2] << endl;
     strcpy(temp_command,command); //we need to save the command temporarly because the parsing function is distructive to the og command string
-
+    //cout << "I exist 0" << endl;
     cout << "Parsing input" << endl;
     // Parse the input command
     int num_args = parse_command(command, args);
@@ -140,7 +141,6 @@ int main(int argc, char *argv[])
         //   cout << history[i] <<endl;
         // }
        strcpy(command,history);
-       cout << "tets" << endl;
        num_args = parse_command(command, args); //parse the new command from history
       }
       else
