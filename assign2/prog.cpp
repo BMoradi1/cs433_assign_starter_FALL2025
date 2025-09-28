@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
     fgets(command, MAX_LINE, stdin);
     //cout << "I exist 1" << endl;
     int length = strlen(command);
-    if(command[length - 1] = '\n')
+    if(command[length - 1] == '\n')
       command[length - 1] = NULL; //remove trailing linebreak from fget.
      // cout << "I exist 2" << length - 2 << endl;
     //cout << ":)" << command[length - 2] << endl;
