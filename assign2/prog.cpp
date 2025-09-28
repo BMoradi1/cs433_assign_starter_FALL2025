@@ -126,7 +126,13 @@ int main(int argc, char *argv[])
     // Forking begins
 
     //Checking for !! {NOT TESTED}
-    if(strcmp(args[0], "!!") == 0)
+    if(strcmp(args[0],"exit") == 0)
+    {
+      should_run = false;
+      break;
+    }
+
+    else if(strcmp(args[0], "!!") == 0)
     {
       if(iteration != 0)
       { //making sure we dont try to access history on the first execution
@@ -145,8 +151,8 @@ int main(int argc, char *argv[])
       }
       else
       {
-        perror("History does not exist");
-        exit(EXIT_FAILURE);
+        perror("No commands in history.");
+        //exit(EXIT_FAILURE);
       }
     }
     pid_t pid;
@@ -179,7 +185,8 @@ int main(int argc, char *argv[])
     cout << "Iteration: " << iteration << endl;
     strcpy(history,temp_command); //Save the last command
     iteration++;
-    //return 0;
+    
   }
+  return 0;
 }
 
