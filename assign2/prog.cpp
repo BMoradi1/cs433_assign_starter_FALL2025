@@ -40,7 +40,7 @@ int parse_command(char command[], char *args[]) {
   char *commandog = new char[MAX_LINE];
   char *token = strtok(command, "   "); //first strtok gets the command
 
-  cout << "Parsed Command:" << token << endl;
+  //cout << "Parsed Command:" << token << endl;
   args[argcount] = token; //arg[0] contains the command
   argcount++;
 
@@ -50,17 +50,52 @@ int parse_command(char command[], char *args[]) {
     token = strtok(NULL, "   ");
     if(token != NULL) //dont increment timer and print token if the next token is null
     {
-      cout << "Parsed ARG:" << token << endl;
+      cout << args[0] << token << endl;
       args[argcount] = token;
       argcount++; //keep track of the number of arguments generated
     }
   }
-  cout << "There are: " << argcount << " Arguments"<< endl;
+ // cout << "There are: " << argcount << " Arguments"<< endl;
   args[argcount] = NULL; //null terminator
   return argcount;//remove one argument because arg[0] is the command
 }
 
-// Holds previous history {NOT TESTED}
+void check_operator(char *args[], int num_args){
+
+  cout << "Flag 0" << endl;
+
+  int argsCount = 0;
+  char *fileArgs[num_args];
+  char *file[0];
+
+  for (int i = 0; i < num_args; i++){
+
+    if(strcmp(args[i],"<") == 0){ //input operator
+     file[0] = args[argsCount];
+     cout << "Flag 1:" << file[0] << endl;
+     argsCount = argsCount + 2; //skip file name and operator
+      while(args[argsCount] != NULL){
+        fileArgs[argsCount] = args[argsCount];
+        cout << "Flag 2" << fileArgs[argsCount] << endl;
+        argsCount++;
+      }
+    }
+    
+
+  if(strcmp(args[i],">") == 0){ //output operator
+     while(strcmp(args[argsCount],">") != 0){
+        fileArgs[argsCount] = args[argsCount];
+        cout << "Flag 1:" << fileArgs[argsCount] << endl;
+         argsCount++;
+      }
+     argsCount++;
+     file[0] = args[argsCount];
+     cout << "Flag 2:" << file[0] << endl;
+        }
+      }
+    }
+  
+// Holds previous history 
 char* access_history(char *args[], int num_args)
 {
   char *history = new char[MAX_LINE];
@@ -110,14 +145,10 @@ int main(int argc, char *argv[])
     // Read the input command
     
     fgets(command, MAX_LINE, stdin);
-    //cout << "I exist 1" << endl;
     int length = strlen(command);
     if(command[length - 1] == '\n')
-      command[length - 1] = NULL; //remove trailing linebreak from fget.
-     // cout << "I exist 2" << length - 2 << endl;
-    //cout << ":)" << command[length - 2] << endl;
+    command[length - 1] = NULL; //remove trailing linebreak from fget.
     strcpy(temp_command,command); //we need to save the command temporarly because the parsing function is distructive to the og command string
-    //cout << "I exist 0" << endl;
     cout << "Parsing input" << endl;
     // Parse the input command
     int num_args = parse_command(command, args);
@@ -135,17 +166,7 @@ int main(int argc, char *argv[])
     else if(strcmp(args[0], "!!") == 0)
     {
       if(iteration != 0)
-      { //making sure we dont try to access history on the first execution
-      //   char *history = new char[MAX_LINE];
-      //   history = access_history(args, num_args);
-      //     for (int i = 0; i < num_args; i++){
-      //       args[i] = &history[i];
-      // 
-        // cout << "reading history: " <<endl;
-        // for(int i = 0; i < history.size();i++)
-        // {
-        //   cout << history[i] <<endl;
-        // }
+      { 
        strcpy(command,history);
        num_args = parse_command(command, args); //parse the new command from history
       }
@@ -155,6 +176,9 @@ int main(int argc, char *argv[])
         //exit(EXIT_FAILURE);
       }
     }
+
+    check_operator(args, num_args);
+
     pid_t pid;
 
     pid = fork(); //Forking a child process
