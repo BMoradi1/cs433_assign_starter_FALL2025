@@ -22,6 +22,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <vector>
+#include <fstream>
 using namespace std;
 
 #define MAX_LINE 80 // The maximum length command
@@ -60,13 +61,14 @@ int parse_command(char command[], char *args[]) {
   return argcount;//remove one argument because arg[0] is the command
 }
 
-void check_operator(char *args[], int num_args){
+string check_operator(char *args[], int num_args){
 
   cout << "Flag 0" << endl;
 
   int argsCount = 0;
   char *fileArgs[num_args];
   char *file[0];
+  string fileName = "default";
 
   for (int i = 0; i < num_args; i++){
 
@@ -78,11 +80,14 @@ void check_operator(char *args[], int num_args){
         fileArgs[argsCount] = args[argsCount];
         cout << "Flag 2" << fileArgs[argsCount] << endl;
         argsCount++;
+         file[0] = args[argsCount];
+         cout << "Flag 2:" << file[0] << endl;
+         fileName = "\"" + std::string(file[0]) + "\"";
       }
     }
     
 
-  if(strcmp(args[i],">") == 0){ //output operator
+  else if (strcmp(args[i],">") == 0){ //output operator
      while(strcmp(args[argsCount],">") != 0){
         fileArgs[argsCount] = args[argsCount];
         cout << "Flag 1:" << fileArgs[argsCount] << endl;
@@ -91,8 +96,11 @@ void check_operator(char *args[], int num_args){
      argsCount++;
      file[0] = args[argsCount];
      cout << "Flag 2:" << file[0] << endl;
+     fileName = "\"" + std::string(file[0]) + "\"";
+     cout << "Flag true" << endl;
         }
       }
+      return fileName;
     }
   
 // Holds previous history 
@@ -177,7 +185,11 @@ int main(int argc, char *argv[])
       }
     }
 
-    check_operator(args, num_args);
+    string file = check_operator(args, num_args);
+
+    if(file != "default"){
+        //redirect output/input
+    }
 
     pid_t pid;
 
