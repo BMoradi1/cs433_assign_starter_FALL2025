@@ -57,41 +57,22 @@ int parse_command(char command[], char *args[]) {
   return argcount;//remove one argument because arg[0] is the command
 }
 
-void check_operator(char *args[], int num_args){
-
+void check_operator(char *args[], int num_args, int check[]){
 
   for (int i = 0; i < num_args; i++){
     if(strcmp(args[i],"<") == 0){ //input operator
-      int fdIn = open(args[i+1], O_RDONLY); //grabs the file descriptor from the next index no (the file) and sets it as read only
-      dup2(fdIn, STDIN_FILENO);
-      close(fdIn);
-  for (int i = 0; i < num_args - 2; ++i) { // removes the operator and text from the index
-     args[i] = args[i];
+     int fdIn = open(args[i+1], O_RDONLY); //grabs the file descriptor from the next index no (the file) and sets it as read only
+     args[i] = NULL;
+     check[0] = fdIn;
+    }
+    
+    else if (strcmp(args[i],">") == 0){ //output operator
+       int fdOut = open(args[i+1], O_WRONLY| O_CREAT|O_TRUNC, S_IRWXU); // grabs file descriptor from the next index no (the file) and sets it as create, write only, emmpty upon opening and execute/search 
+       args[i] = NULL;
+       check[1] = fdOut;
+      }
     }
   }
-    
-
-    else if (strcmp(args[i],">") == 0){ //output operator
-        int fdOut = open(args[i+1], O_WRONLY| O_CREAT|O_TRUNC, S_IRWXU); // grabs file descriptor from the next index no (the file) and sets it as create, write only, emmpty upon opening and execute/search 
-        dup2(fdOut, STDOUT_FILENO);
-        close(fdOut);
-    for (int i = 0; i < num_args - 2; ++i) { // removes the operator and text from the index
-         args[i] = args[i];
-         }
-        }
-    }
-  } 
-
-// Holds previous history 
-char* access_history(char *args[], int num_args)
-{
-  char *history = new char[MAX_LINE];
-    for (int i = 0; i < num_args; i++)
-    {
-      history[i] = *args[i]; //copies args to history
-    }
-  return history;
-} 
 
 /**
  * @brief The main function of a simple UNIX Shell. You may add additional
@@ -106,7 +87,8 @@ int main(int argc, char *argv[])
   char *args[MAX_LINE / 2 + 1]; // hold parsed out command line arguments
   int should_run = 1;           /* flag to determine when to exit program */
   char  history[MAX_LINE]; //this will store the last executed command
-  char temp_command[MAX_LINE]; //this will preserve the command to put into the history after execution.
+  char temp_command[MAX_LINE]; //this will preserve the command to put into the history after execution. 
+  int checkOperator[] = {-1,-1};
   // TODO: Add additional variables for the implementation
   while (should_run) {
     // TODO: Add your code for the implementation
@@ -128,6 +110,8 @@ int main(int argc, char *argv[])
     if(command[length - 1] == '\n')
     command[length - 1] = NULL; //remove trailing linebreak from fget.
     strcpy(temp_command,command); //we need to save the command temporarly because the parsing function is distructive to the og command string
+
+
     cout << "Parsing input" << endl;
     // Parse the input command
     int num_args = parse_command(command, args);
@@ -155,8 +139,7 @@ int main(int argc, char *argv[])
         perror("No commands history found.");
       }
     }
-
-
+    
     pid_t pid;
 
     pid = fork(); //Forking a child process
@@ -169,8 +152,18 @@ int main(int argc, char *argv[])
 
      else if(pid == 0)
      {
-      check_operator(args, num_args);
       //cout << "I am a child process" << endl; //Debut
+      check_operator(args, num_args, checkOperator);
+
+      if(checkOperator[1] != -1){
+        dup2(checkOperator[1], STDOUT_FILENO);
+        close(checkOperator[1]);
+      }
+      else if(checkOperator[0] != -1){
+       dup2(checkOperator[0], STDIN_FILENO);
+       close(checkOperator[0]);
+      }
+
       execvp(args[0], args); //Executes parsed arguments and is terminated by a null pointer
       perror("Command not found");
       exit(1);
