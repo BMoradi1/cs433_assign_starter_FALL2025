@@ -1,0 +1,6 @@
+Makefile
+README.md
+prog.cpp
+prog.o
+prog2
+text.txt

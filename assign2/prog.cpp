@@ -38,84 +38,59 @@ using namespace std;
 int parse_command(char command[], char *args[]) {
 
   int argcount = 0;
-  char *commandog = new char[MAX_LINE];
   char *token = strtok(command, "   "); //first strtok gets the command
 
-  //cout << "Parsed Command:" << token << endl;
   args[argcount] = token; //arg[0] contains the command
   argcount++;
 
   //command = token;
-  while (token != NULL) //keep going until we hit the end of the string
-  { // we only continue when tokens are left 
+  while (token != NULL) //keep going until we hit the end of the string, we only continue when tokens are left 
+  { 
     token = strtok(NULL, "   ");
-    if(token != NULL) //dont increment timer and print token if the next token is null
+    if(token != NULL) //dont increment count if the next token is null
     {
-      cout << args[0] << token << endl;
       args[argcount] = token;
       argcount++; //keep track of the number of arguments generated
     }
   }
- // cout << "There are: " << argcount << " Arguments"<< endl;
   args[argcount] = NULL; //null terminator
   return argcount;//remove one argument because arg[0] is the command
 }
 
-string check_operator(char *args[], int num_args){
-
-  cout << "Flag 0" << endl;
-
-  int argsCount = 0;
-  char *fileArgs[num_args];
-  char *file[0];
-  string fileName = "default";
+void check_operator(char *args[], int num_args){
 
   for (int i = 0; i < num_args; i++){
-
     if(strcmp(args[i],"<") == 0){ //input operator
-     file[0] = args[argsCount];
-     cout << "Flag 1:" << file[0] << endl;
-     argsCount = argsCount + 2; //skip file name and operator
-      while(args[argsCount] != NULL){
-        fileArgs[argsCount] = args[argsCount];
-        cout << "Flag 2" << fileArgs[argsCount] << endl;
-        argsCount++;
-         file[0] = args[argsCount];
-         cout << "Flag 2:" << file[0] << endl;
-         fileName = "\"" + std::string(file[0]) + "\"";
-      }
+      int fdIn = open(args[i+1], O_RDONLY); //grabs the file descriptor from the next index no (the file) and sets it as read only
+      dup2(fdIn, STDIN_FILENO);
+      close(fdIn);
+  for (int i = 0; i < num_args - 2; ++i) { // removes the operator and text from the index
+     args[i] = args[i];
+    }
+      cout << "Flag: <" << endl;
     }
     
 
-  else if (strcmp(args[i],">") == 0){ //output operator
-     while(strcmp(args[argsCount],">") != 0){
-        fileArgs[argsCount] = args[argsCount];
-        cout << "Flag 1:" << fileArgs[argsCount] << endl;
-         argsCount++;
-      }
-     argsCount++;
-     file[0] = args[argsCount];
-     cout << "Flag 2:" << file[0] << endl;
-     fileName = "\"" + std::string(file[0]) + "\"";
-     cout << "Flag true" << endl;
+    else if (strcmp(args[i],">") == 0){ //output operator
+        int fdOut = open(args[i+1], O_WRONLY| O_CREAT|O_TRUNC, S_IRWXU); // grabs file descriptor from the next index no (the file) and sets it as create, write only, emmpty upon opening and execute/search 
+        dup2(fdOut, STDOUT_FILENO);
+        close(fdOut);
+    for (int i = 0; i < num_args - 2; ++i) { // removes the operator and text from the index
+         args[i] = args[i];
+         }
+        cout << "Flag: >" << endl;
         }
-      }
-      return fileName;
     }
-  
+  } 
+
 // Holds previous history 
 char* access_history(char *args[], int num_args)
 {
   char *history = new char[MAX_LINE];
-  if (history[0] == NULL)
-  {
     for (int i = 0; i < num_args; i++)
     {
-      history[i] = *args[i];
+      history[i] = *args[i]; //copies args to history
     }
-    cout << history[0] << endl;
-    cout << args[0] << endl;
-  }
   return history;
 } 
 
@@ -133,7 +108,6 @@ int main(int argc, char *argv[])
   char command[MAX_LINE];       // the command that was entered
   char *args[MAX_LINE / 2 + 1]; // hold parsed out command line arguments
   int should_run = 1;           /* flag to determine when to exit program */
-  int iteration = 0;            // Used for history function
   char  history[MAX_LINE]; //this will store the last executed command
   char temp_command[MAX_LINE]; //this will preserve the command to put into the history after execution.
   // TODO: Add additional variables for the implementation
@@ -151,7 +125,7 @@ int main(int argc, char *argv[])
 
     cout << "Reading input" << endl;
     // Read the input command
-    
+  
     fgets(command, MAX_LINE, stdin);
     int length = strlen(command);
     if(command[length - 1] == '\n')
@@ -160,20 +134,21 @@ int main(int argc, char *argv[])
     cout << "Parsing input" << endl;
     // Parse the input command
     int num_args = parse_command(command, args);
+    if (num_args == 0){
+      continue;
+    }
     
     cout << "Attempting execution" << endl;
     // Forking begins
-
     if(strcmp(args[0],"exit") == 0)
     {
       should_run = false;
       break;
     }
-    //Checking for !! {NOT TESTED}
 
     else if(strcmp(args[0], "!!") == 0)
-    {
-      if(iteration != 0)
+    { 
+      if(strlen(history) != 0)
       { 
        strcpy(command,history);
        num_args = parse_command(command, args); //parse the new command from history
@@ -181,15 +156,9 @@ int main(int argc, char *argv[])
       else
       {
         perror("No commands in history.");
-        //exit(EXIT_FAILURE);
       }
     }
 
-    string file = check_operator(args, num_args);
-
-    if(file != "default"){
-        //redirect output/input
-    }
 
     pid_t pid;
 
@@ -203,6 +172,7 @@ int main(int argc, char *argv[])
 
      else if(pid == 0)
      {
+      check_operator(args, num_args);
       //cout << "I am a child process" << endl; //Debut
       execvp(args[0], args); //Executes parsed arguments and is terminated by a null pointer
       perror("Error, This line should not be reached");
@@ -212,16 +182,12 @@ int main(int argc, char *argv[])
     else if(pid > 0)
     { 
       char last = strlen(args[0] - 1); //Grab the last char of the command
-      //Ampersand check {NOT TESTED}
       if (last != '&'){ //If the end of the command isnt an ampersand
       wait(NULL); //Wait for the child to finish
       }
-      //cout << "I am a parent process" << endl; //Debug
-      }
-    cout << "Iteration: " << iteration << endl;
+     }
     strcpy(history,temp_command); //Save the last command
-    iteration++;
-    
+    //iteration++;
   }
   return 0;
 }
