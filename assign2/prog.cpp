@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
     printf("osh>");
     fflush(stdout);
 
-    cout << "Reading input" << endl;
+    //cout << "Reading input" << endl;
     // Read the input command
   
     fgets(command, MAX_LINE, stdin);
@@ -112,14 +112,14 @@ int main(int argc, char *argv[])
     strcpy(temp_command,command); //we need to save the command temporarly because the parsing function is distructive to the og command string
 
 
-    cout << "Parsing input" << endl;
+    //cout << "Parsing input" << endl;
     // Parse the input command
     int num_args = parse_command(command, args);
     if (num_args == 0){
       continue;
     }
     
-    cout << "Attempting execution" << endl;
+   // cout << "Attempting execution" << endl;
     // Forking begins
     if(strcmp(command,"exit") == 0)
     {
@@ -132,11 +132,14 @@ int main(int argc, char *argv[])
       if(strlen(history) != 0)
       { 
        strcpy(command,history);
+       cout << history << endl;
+       strcpy(temp_command,history);
        num_args = parse_command(command, args); //parse the new command from history
+       
       }
       else
       {
-        perror("No commands history found.");
+        perror("No command history found.");
       }
     }
     
