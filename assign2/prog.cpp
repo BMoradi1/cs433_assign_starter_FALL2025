@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
 
      else if(pid == 0)
      {
-      //cout << "I am a child process" << endl; //Debut
+     // cout << "I am a child process" << endl; //Debut
       check_operator(args, num_args, checkOperator);
 
       if(checkOperator[1] != -1){
@@ -171,9 +171,18 @@ int main(int argc, char *argv[])
 
     else if(pid > 0)
     { 
-      char last = strlen(args[0] - 1); //Grab the last char of the command
-      if (last != '&'){ //If the end of the command isnt an ampersand
-      wait(NULL); //Wait for the child to finish
+   //   cout << "I am a parent process" << endl;
+      char *command = args[num_args - 1]; //Grab the last char of the command
+      int comLen = strlen(command);
+      char last = command[comLen - 1];  
+
+      if ( last == '&'){ //If the end of the arg is an ampersand
+         command[comLen - 1] = NULL;
+         args[num_args - 1] = command;
+         execvp(args[0], args);
+      }
+      else{
+         wait(NULL); //Wait for the child to finish
       }
      }
     strcpy(history,temp_command); //Save the last command
