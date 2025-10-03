@@ -59,6 +59,7 @@ int parse_command(char command[], char *args[]) {
 
 void check_operator(char *args[], int num_args){
 
+
   for (int i = 0; i < num_args; i++){
     if(strcmp(args[i],"<") == 0){ //input operator
       int fdIn = open(args[i+1], O_RDONLY); //grabs the file descriptor from the next index no (the file) and sets it as read only
@@ -67,8 +68,7 @@ void check_operator(char *args[], int num_args){
   for (int i = 0; i < num_args - 2; ++i) { // removes the operator and text from the index
      args[i] = args[i];
     }
-      cout << "Flag: <" << endl;
-    }
+  }
     
 
     else if (strcmp(args[i],">") == 0){ //output operator
@@ -78,7 +78,6 @@ void check_operator(char *args[], int num_args){
     for (int i = 0; i < num_args - 2; ++i) { // removes the operator and text from the index
          args[i] = args[i];
          }
-        cout << "Flag: >" << endl;
         }
     }
   } 
@@ -93,8 +92,6 @@ char* access_history(char *args[], int num_args)
     }
   return history;
 } 
-
-//TODO: Add additional functions if you need
 
 /**
  * @brief The main function of a simple UNIX Shell. You may add additional
@@ -140,13 +137,13 @@ int main(int argc, char *argv[])
     
     cout << "Attempting execution" << endl;
     // Forking begins
-    if(strcmp(args[0],"exit") == 0)
+    if(strcmp(command,"exit") == 0)
     {
       should_run = false;
       break;
     }
 
-    else if(strcmp(args[0], "!!") == 0)
+    else if(strcmp(command, "!!") == 0)
     { 
       if(strlen(history) != 0)
       { 
@@ -155,7 +152,7 @@ int main(int argc, char *argv[])
       }
       else
       {
-        perror("No commands in history.");
+        perror("No commands history found.");
       }
     }
 
@@ -175,8 +172,8 @@ int main(int argc, char *argv[])
       check_operator(args, num_args);
       //cout << "I am a child process" << endl; //Debut
       execvp(args[0], args); //Executes parsed arguments and is terminated by a null pointer
-      perror("Error, This line should not be reached");
-      exit(EXIT_FAILURE); //This line should not be reached
+      perror("Command not found");
+      exit(1);
     }
 
     else if(pid > 0)
