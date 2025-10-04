@@ -59,17 +59,17 @@ int parse_command(char command[], char *args[]) {
 
 void check_operator(char *args[], int num_args, int check[]){
 
-  for (int i = 0; i < num_args; i++){
+  for (int i = 0; i < num_args; i++){ //loop through our list of aguments to look for an operator
     if(strcmp(args[i],"<") == 0){ //input operator
      int fdIn = open(args[i+1], O_RDONLY); //grabs the file descriptor from the next index no (the file) and sets it as read only
-     args[i] = NULL;
-     check[0] = fdIn;
+     args[i] = NULL; //set the operator index as NULL, we dont want it interfering with execution
+     check[0] = fdIn; //our array to check if we're using a redirection, the first index [0] represents input and if it isnt set to -1, we'll call dup2 in main
     }
     
     else if (strcmp(args[i],">") == 0){ //output operator
        int fdOut = open(args[i+1], O_WRONLY| O_CREAT|O_TRUNC, S_IRWXU); // grabs file descriptor from the next index no (the file) and sets it as create, write only, emmpty upon opening and execute/search 
-       args[i] = NULL;
-       check[1] = fdOut;
+       args[i] = NULL; //set the operator index as NULL, we dont want it interfering with execution
+       check[1] = fdOut;//our array to check if we're using a redirection, the second index [1] represents output and if it isnt set to -1, we'll call dup2 in main
       }
     }
   }
@@ -88,40 +88,33 @@ int main(int argc, char *argv[])
   int should_run = 1;           /* flag to determine when to exit program */
   char  history[MAX_LINE]; //this will store the last executed command
   char temp_command[MAX_LINE]; //this will preserve the command to put into the history after execution. 
-  int checkOperator[] = {-1,-1};
+  int checkOperator[] = {-1,-1}; //checks and stores for file desc ints, the first index represents an input file desc, and the second an output file desc
   // TODO: Add additional variables for the implementation
   while (should_run) {
-    // TODO: Add your code for the implementation
-    /**
-     * After reading user input, the steps are:
-     * (1) fork a child process using fork()
-     * (2) the child process will invoke execvp()
-     * (3) parent will invoke wait() unless command included &
-     */
     if(argv[0])
     printf("osh>");
     fflush(stdout);
 
-    //cout << "Reading input" << endl;
+    cout << "Reading input" << endl;
     // Read the input command
   
     fgets(command, MAX_LINE, stdin);
     int length = strlen(command);
-    if(command[length - 1] == '\n')
+    if(command[length - 1] == '\n') //to deal with newline affecting our parsing
     command[length - 1] = NULL; //remove trailing linebreak from fget.
     strcpy(temp_command,command); //we need to save the command temporarly because the parsing function is distructive to the og command string
 
 
-    //cout << "Parsing input" << endl;
+    cout << "Parsing input" << endl;
     // Parse the input command
     int num_args = parse_command(command, args);
-    if (num_args == 0){
+    if (num_args == 0){ //handles a lack of arguments
       continue;
     }
     
-   // cout << "Attempting execution" << endl;
+    cout << "Attempting execution" << endl;
     // Forking begins
-    if(strcmp(command,"exit") == 0)
+    if(strcmp(command,"exit") == 0) //if "exit" is our input, terminate
     {
       should_run = false;
       break;
@@ -129,11 +122,11 @@ int main(int argc, char *argv[])
 
     else if(strcmp(command, "!!") == 0)
     { 
-      if(strlen(history) != 0)
+      if(strlen(history) != 0) //if history doesnt exist
       { 
-       strcpy(command,history);
+       strcpy(command,history); ///copy our command to our history char array
        cout << history << endl;
-       strcpy(temp_command,history);
+       strcpy(temp_command,history); //ensures that history can handle repeated !!
        num_args = parse_command(command, args); //parse the new command from history
        
       }
@@ -156,15 +149,15 @@ int main(int argc, char *argv[])
      else if(pid == 0)
      {
      // cout << "I am a child process" << endl; //Debut
-      check_operator(args, num_args, checkOperator);
+      check_operator(args, num_args, checkOperator); //checks for operators
 
-      if(checkOperator[1] != -1){
-        dup2(checkOperator[1], STDOUT_FILENO);
-        close(checkOperator[1]);
+      if(checkOperator[1] != -1){ //if our output check index isnt default, that means checkOperator found an operator
+        dup2(checkOperator[1], STDOUT_FILENO); //redirect the output to the file using the filedesc int stored in our array
+        close(checkOperator[1]); //close the file
       }
-      else if(checkOperator[0] != -1){
-       dup2(checkOperator[0], STDIN_FILENO);
-       close(checkOperator[0]);
+      else if(checkOperator[0] != -1){ //if our input check index isnt default, that means checkOperator found an operator
+       dup2(checkOperator[0], STDIN_FILENO); //redirect the output to the file using the filedesc int stored in our array
+       close(checkOperator[0]); //close the file
       }
 
       execvp(args[0], args); //Executes parsed arguments and is terminated by a null pointer
@@ -175,21 +168,20 @@ int main(int argc, char *argv[])
     else if(pid > 0)
     { 
    //   cout << "I am a parent process" << endl;
-      char *command = args[num_args - 1]; //Grab the last char of the command
-      int comLen = strlen(command);
-      char last = command[comLen - 1];  
+      char *command = args[num_args - 1]; //Grab the last word of the input
+      int comLen = strlen(command); //Grab the character length of the word
+      char last = command[comLen - 1]; //Check the last character of our last arg
 
       if ( last == '&'){ //If the end of the arg is an ampersand
-         command[comLen - 1] = NULL;
-         args[num_args - 1] = command;
-         execvp(args[0], args);
+         command[comLen - 1] = NULL; //remove the ampersand, change it to NULL to prevent unexpected behavior
+         args[num_args - 1] = command; //add our newly adjusted arg back into the last index
+         execvp(args[0], args); //execute 
       }
       else{
          wait(NULL); //Wait for the child to finish
       }
      }
     strcpy(history,temp_command); //Save the last command
-    //iteration++;
   }
   return 0;
 }
