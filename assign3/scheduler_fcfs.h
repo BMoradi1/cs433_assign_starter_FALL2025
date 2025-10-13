@@ -17,8 +17,9 @@
  */
 class SchedulerFCFS : public Scheduler {
 private:
-    // TODO: add necessary member variables here for your implementation
-
+// TODO: add necessary member variables here for your implementation
+vector<int> waitTimes;
+vector<int> turnaroundTimes;
 public:
     /**
      * @brief Construct a new SchedulerFCFS object

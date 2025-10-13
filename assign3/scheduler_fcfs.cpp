@@ -10,9 +10,9 @@
 
 #include "scheduler_fcfs.h"
 
-vector<int> waitTimes;
-vector<int> turnaroundTimes;
-vector<PCB> FCFSschedule;
+vector<int> waitTimes; //A vector to hold our wait times
+vector<int> turnaroundTimes; //A vector to hold our turnaround times
+std::vector<PCB> fcfsSchedule; //Our schedule, unaltered for a FCFS as the processes will be executed in order
 
 // TODO: add implementation of SchedulerFCFS constructor, destrcutor and 
 SchedulerFCFS::SchedulerFCFS(){
@@ -22,31 +22,42 @@ SchedulerFCFS::SchedulerFCFS(){
 SchedulerFCFS::~SchedulerFCFS(){
 }
 
-void init(std::vector<PCB>& process_list){
-//Doesnt need to be sorted since its FCFS
+void SchedulerFCFS::init(std::vector<PCB>& process_list){
+
 int time = 0;
-int wait = 0;
+
+fcfsSchedule = process_list;
+
 for (int i = 0; i < process_list.size(); i++){
+
 cout << "Running Process " << process_list[i].name << " for " << process_list[i].burst_time << " time units" << endl;
 
-FCFSschedule[i] = process_list[i]; //accessibility for this class
+waitTimes.push_back(time);
 
-wait = wait + time;
-waitTimes[i] = wait;
 time = time + process_list[i].burst_time;
-turnaroundTimes[i] = time;
+turnaroundTimes.push_back(time);
 
    }
 }
 
-void print_results(){
+void SchedulerFCFS::print_results(){
 
-for (int i = 0; i < FCFSschedule.size(); i++){
-   cout << FCFSschedule[i].name << " turnaround time = " << turnaroundTimes[i] << ", waiting time = " << waitTimes[i] << endl;
-   }
+float averageWait = 0;
+float averageTurnaround = 0;
+
+for (int i = 0; i < fcfsSchedule.size(); i++){
+    averageTurnaround += turnaroundTimes[i];
+    averageWait += waitTimes[i];
+   }    
+   averageTurnaround = averageTurnaround / fcfsSchedule.size();
+   averageWait = averageWait / fcfsSchedule.size();
+
+   cout << "Average turn-around time = " << averageTurnaround <<", Average waiting time = " << averageWait << endl;
 }
 
-void simulate(){
-cout << "waht " << endl;
+void SchedulerFCFS::simulate(){
+for (int i = 0; i < fcfsSchedule.size(); i++){
+   cout << fcfsSchedule[i].name << " turnaround time = " << turnaroundTimes[i] << ", waiting time = " << waitTimes[i] << endl;
+   }
 }
 // member functions init, print_results, and simulate here
