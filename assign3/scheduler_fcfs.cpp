@@ -16,26 +16,25 @@ std::vector<PCB> fcfsSchedule; //Our schedule, unaltered for a FCFS as the proce
 
 // TODO: add implementation of SchedulerFCFS constructor, destrcutor and 
 SchedulerFCFS::SchedulerFCFS(){
-
+   //TODO Constructor
 }
 
 SchedulerFCFS::~SchedulerFCFS(){
+   //TODO Deconstructor
 }
 
 void SchedulerFCFS::init(std::vector<PCB>& process_list){
 
-int time = 0;
+int time = 0; //Tracks current time units
 
-fcfsSchedule = process_list;
+fcfsSchedule = process_list; //store our process list within our schedule
 
 for (int i = 0; i < process_list.size(); i++){
 
-cout << "Running Process " << process_list[i].name << " for " << process_list[i].burst_time << " time units" << endl;
-
-waitTimes.push_back(time);
-
-time = time + process_list[i].burst_time;
-turnaroundTimes.push_back(time);
+   cout << "Running Process " << process_list[i].name << " for " << process_list[i].burst_time << " time units" << endl;
+   waitTimes.push_back(time);
+   time = time + process_list[i].burst_time;
+   turnaroundTimes.push_back(time); 
 
    }
 }
@@ -46,11 +45,11 @@ float averageWait = 0;
 float averageTurnaround = 0;
 
 for (int i = 0; i < fcfsSchedule.size(); i++){
-    averageTurnaround += turnaroundTimes[i];
-    averageWait += waitTimes[i];
+    averageTurnaround += turnaroundTimes[i]; //add each turnaround time to our average
+    averageWait += waitTimes[i]; //add each wait time to our average
    }    
-   averageTurnaround = averageTurnaround / fcfsSchedule.size();
-   averageWait = averageWait / fcfsSchedule.size();
+   averageTurnaround = averageTurnaround / fcfsSchedule.size(); //divide our total turnaround by the amount of PCBs
+   averageWait = averageWait / fcfsSchedule.size(); // divide our total wait by the amout of PCBs
 
    cout << "Average turn-around time = " << averageTurnaround <<", Average waiting time = " << averageWait << endl;
 }
