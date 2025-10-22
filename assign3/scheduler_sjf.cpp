@@ -15,7 +15,6 @@
 vector<int> waitTimes; //A vector to hold our wait times
 vector<int> turnaroundTimes; //A vector to hold our turnaround times
 std::vector<PCB> sjfSchedule; //Our schedule, sorted through a maxheap by burst time
-std::vector<PCB> ogSchedule; //Our original schedule
 
 SchedulerSJF::SchedulerSJF(){
     //TODO Constructor
@@ -25,7 +24,7 @@ SchedulerSJF::~SchedulerSJF(){
     //TODO Deconstructor
 }
 
-void heapify(std::vector<PCB>& sjfSchedule, int count, int i, bool kind){
+void heapify(std::vector<PCB>& sjfSchedule, int count, int i){
 
     int largest = i;
     int left = 2*i+1;
@@ -41,7 +40,7 @@ void heapify(std::vector<PCB>& sjfSchedule, int count, int i, bool kind){
     if(largest!=i){
        // cout << "Swapping: " << sjfSchedule[i].name << " and " << sjfSchedule[largest].name << endl;
         swap(sjfSchedule[i], sjfSchedule[largest]);
-        heapify(sjfSchedule, count, largest, true);
+        heapify(sjfSchedule, count, largest);
     }
 }
 
@@ -50,15 +49,14 @@ void SchedulerSJF::init(std::vector<PCB>& process_list){
     int time = 0;
 
     sjfSchedule = process_list;
-    ogSchedule = process_list;
 
     for(int i = count / 2 - 1; i >= 0; i--){
-    heapify(sjfSchedule, count, i, true);
+    heapify(sjfSchedule, count, i);
     }
         
     for (int i = count - 1; i > 0; i--){
             swap(sjfSchedule[0], sjfSchedule[i]);
-            heapify(sjfSchedule, i, 0, true);
+            heapify(sjfSchedule, i, 0);
     }
 
     for (int i = 0; i < count; i++){
