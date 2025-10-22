@@ -15,7 +15,7 @@
 #include <algorithm>
 
 
-std::vector<std::tuple<int, int, int>> finalList; //Process id, waittime, 
+std::vector<std::tuple<string, int, int>> finalList; //Process id, waittime, 
 std::vector<PCB> sjfSchedule; //Our schedule, sorted through a maxheap by burst time
 
 SchedulerSJF::SchedulerSJF(){
@@ -28,31 +28,42 @@ SchedulerSJF::~SchedulerSJF(){
 
 void heapify(std::vector<PCB>& sjfSchedule, int count, int i){
 
-    int largest = i;
+    int shortest = i;
     int left = 2*i+1;
     int right = 2*i+2;
 
-    if(left < count && sjfSchedule[left].burst_time > sjfSchedule[largest].burst_time){
-        largest = left;
+    if(left < count && sjfSchedule[left].burst_time > sjfSchedule[shortest].burst_time){
+        shortest = left;
     }
-    if(right < count && sjfSchedule[right].burst_time > sjfSchedule[largest].burst_time){
-        largest = right;
+   if(right < count && sjfSchedule[right].burst_time > sjfSchedule[shortest].burst_time){
+        shortest = right;
+    }
+
+     if(left < count && sjfSchedule[left].burst_time == sjfSchedule[shortest].burst_time){ //if both the left and "shortest" have the same burst time, prioritize the process with a smaller PID
+           shortest = left;
+        }
+
+     if(right < count && sjfSchedule[right].burst_time == sjfSchedule[shortest].burst_time){ //if both the right and "shortest" have the same burst time, prioritize the process with a smaller PID
+        if(sjfSchedule[right].id > sjfSchedule[shortest].id){
+            shortest = right;
+        }
     }
     
-    if(largest!=i){
+    if(shortest!=i){
        // cout << "Swapping: " << sjfSchedule[i].name << " and " << sjfSchedule[largest].name << endl;
-        swap(sjfSchedule[i], sjfSchedule[largest]);
-        heapify(sjfSchedule, count, largest);
+        swap(sjfSchedule[i], sjfSchedule[shortest]);
+        heapify(sjfSchedule, count, shortest);
     }
 }
 
 void SchedulerSJF::init(std::vector<PCB>& process_list){
     int count = process_list.size();
-    int waitTime;
-    int turnaroundTime; 
-    int pid;
     int time = 0;
 
+    string pid;
+    int waitTime;
+    int turnaroundTime; 
+    
     sjfSchedule = process_list;
 
     for(int i = count / 2 - 1; i >= 0; i--){
@@ -66,13 +77,13 @@ void SchedulerSJF::init(std::vector<PCB>& process_list){
 
     for (int i = 0; i < count; i++){
         cout << "Running Process " << sjfSchedule[i].name << " for " << sjfSchedule[i].burst_time << " time units" << endl;
-        pid = sjfSchedule[i].id + 1;
+        pid = sjfSchedule[i].name;
         waitTime = time;
         time = time + sjfSchedule[i].burst_time;
         turnaroundTime = time;
-        finalList.push_back(tuple<int, int, int>(pid,waitTime,turnaroundTime));
+        finalList.push_back(tuple<string, int, int>(pid,waitTime,turnaroundTime));
     }
-     sort(finalList.begin(), finalList.end(), [](const tuple<int,int,int> &a, const tuple<int,int,int> &b){
+     sort(finalList.begin(), finalList.end(), [](const tuple<string,int,int> &a, const tuple<string,int,int> &b){ //resort our list by original PID
         return get<0>(a) < get<0>(b);
     });
 }
@@ -100,7 +111,7 @@ int count = sjfSchedule.size();
 //TODO: fix re-sort by PID
 
 for (int i = 0; i < count; i++){
-   cout << "T" << get<0>(finalList[i]) << " turnaround time = " << get<2>(finalList[i]) << ", waiting time = " << get<1>(finalList[i]) << endl;
+   cout << get<0>(finalList[i]) << " turnaround time = " << get<2>(finalList[i]) << ", waiting time = " << get<1>(finalList[i]) << endl;
    }
 }
 // TODO: add implementation of SchedulerSJF constructor, destrcutor and 
