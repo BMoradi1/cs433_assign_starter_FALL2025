@@ -11,9 +11,11 @@
 //References: https://www.geeksforgeeks.org/dsa/heap-sort/
 
 #include "scheduler_sjf.h"
+#include <tuple>
+#include <algorithm>
 
-vector<int> waitTimes; //A vector to hold our wait times
-vector<int> turnaroundTimes; //A vector to hold our turnaround times
+
+std::vector<std::tuple<int, int, int>> finalList; //Process id, waittime, 
 std::vector<PCB> sjfSchedule; //Our schedule, sorted through a maxheap by burst time
 
 SchedulerSJF::SchedulerSJF(){
@@ -46,6 +48,9 @@ void heapify(std::vector<PCB>& sjfSchedule, int count, int i){
 
 void SchedulerSJF::init(std::vector<PCB>& process_list){
     int count = process_list.size();
+    int waitTime;
+    int turnaroundTime; 
+    int pid;
     int time = 0;
 
     sjfSchedule = process_list;
@@ -61,10 +66,15 @@ void SchedulerSJF::init(std::vector<PCB>& process_list){
 
     for (int i = 0; i < count; i++){
         cout << "Running Process " << sjfSchedule[i].name << " for " << sjfSchedule[i].burst_time << " time units" << endl;
-        waitTimes.push_back(time);
+        pid = sjfSchedule[i].id + 1;
+        waitTime = time;
         time = time + sjfSchedule[i].burst_time;
-        turnaroundTimes.push_back(time); 
+        turnaroundTime = time;
+        finalList.push_back(tuple<int, int, int>(pid,waitTime,turnaroundTime));
     }
+     sort(finalList.begin(), finalList.end(), [](const tuple<int,int,int> &a, const tuple<int,int,int> &b){
+        return get<0>(a) < get<0>(b);
+    });
 }
 
 void SchedulerSJF::print_results(){
@@ -74,8 +84,8 @@ void SchedulerSJF::print_results(){
     int count = sjfSchedule.size();
     
     for (int i = 0; i < count; i++){
-        averageTurnaround += turnaroundTimes[i]; //add each turnaround time to our average
-        averageWait += waitTimes[i]; //add each wait time to our average
+        averageTurnaround += get<2>(finalList[i]); //add each turnaround time to our average
+        averageWait += get<1>(finalList[i]); //add each wait time to our average
     }    
     averageTurnaround = averageTurnaround / sjfSchedule.size(); //divide our total turnaround by the amount of PCBs
     averageWait = averageWait / sjfSchedule.size(); // divide our total wait by the amout of PCBs
@@ -90,7 +100,7 @@ int count = sjfSchedule.size();
 //TODO: fix re-sort by PID
 
 for (int i = 0; i < count; i++){
-   cout << sjfSchedule[i].name << " turnaround time = " << turnaroundTimes[i] << ", waiting time = " << waitTimes[i] << endl;
+   cout << "T" << get<0>(finalList[i]) << " turnaround time = " << get<2>(finalList[i]) << ", waiting time = " << get<1>(finalList[i]) << endl;
    }
 }
 // TODO: add implementation of SchedulerSJF constructor, destrcutor and 
