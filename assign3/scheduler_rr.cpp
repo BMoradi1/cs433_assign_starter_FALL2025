@@ -15,6 +15,7 @@
 // member functions init, print_results, and simulate here
 vector<int> waitTimes; //A vector to hold our wait times
 vector<int> turnaroundTimes; //A vector to hold our turnaround times
+
 int time_quantum = 0;
 std::vector<PCB> RRSchedule; //Our schedule, unaltered for a FCFS as the processes will be executed in order
 std::vector<PCB> RRScheduleSaved;
