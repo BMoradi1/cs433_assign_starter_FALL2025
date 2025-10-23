@@ -51,8 +51,8 @@ void SchedulerRR::print_results()
         averageTurnaround += turnaroundTimes[i]; //add each turnaround time to our average
         averageWait += waitTimes[i]; //add each wait time to our average
     }    
-    averageTurnaround = averageTurnaround / RRSchedule.size(); //divide our total turnaround by the amount of PCBs
-    averageWait = averageWait / RRSchedule.size(); // divide our total wait by the amout of PCBs
+    averageTurnaround = averageTurnaround / RRScheduleSaved.size(); //divide our total turnaround by the amount of PCBs
+    averageWait = averageWait / RRScheduleSaved.size(); // divide our total wait by the amout of PCBs
 
     cout << "Average turn-around time = " << averageTurnaround <<", Average waiting time = " << averageWait << endl;
 }
