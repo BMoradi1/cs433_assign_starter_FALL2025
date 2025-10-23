@@ -73,7 +73,7 @@ void SchedulerRR::simulate()
         else
         {
             cout << "Running Process " << running.name<<" for " << running.burst_time << " time units" << endl;
-            RRSchedule.erase(RRSchedule.begin());//remove it from the front, we will have to run it again
+            RRSchedule.erase(RRSchedule.begin());//remove it from the queue. execution is finished
         }
     }
 }
