@@ -16,7 +16,6 @@
 vector<int> waitTimes; //A vector to hold our wait times
 vector<int> turnaroundTimes; //A vector to hold our turnaround times
 int time_quantum = 0;
-int time;
 std::vector<PCB> RRSchedule; //Our schedule, unaltered for a FCFS as the processes will be executed in order
 std::vector<PCB> RRScheduleSaved;
 SchedulerRR::SchedulerRR(int tq)
@@ -34,7 +33,6 @@ SchedulerRR::~SchedulerRR()
 void SchedulerRR::init(std::vector<PCB>& process_list)
 {
 
-    time = 0; //Tracks current time units
     RRSchedule = process_list; //store our process list within our schedule
     RRScheduleSaved = process_list; //preserve for result printing
     
@@ -67,14 +65,14 @@ void SchedulerRR::simulate()
         running = RRSchedule.front(); //get the first element in our schedule
         if(running.burst_time > time_quantum) //check if its runtime excedes the tq
         {
-            cout << "Running Process" << running.name<<" for" << time_quantum << "time units";
+            cout << "Running Process " << running.name<<" for " << time_quantum << " time units" << endl;
             RRSchedule.erase(RRSchedule.begin());//remove it from the front, we will have to run it again
             running.burst_time = running.burst_time - time_quantum; //new burt time because it raun for time quantum time units
             RRSchedule.push_back(running); //add to back of schedule
         }
         else
         {
-            cout << "Running Process" << running.name<<" for" << running.burst_time << "time units";
+            cout << "Running Process " << running.name<<" for " << running.burst_time << " time units" << endl;
             RRSchedule.erase(RRSchedule.begin());//remove it from the front, we will have to run it again
         }
     }
