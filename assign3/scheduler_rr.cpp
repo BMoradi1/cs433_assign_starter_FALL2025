@@ -10,15 +10,18 @@
 //
 
 #include "scheduler_rr.h"
+#include <tuple>
+#include <algorithm>
 
 // TODO: add implementation of SchedulerRR constructor, destrcutor and 
 // member functions init, print_results, and simulate here
 vector<int> waitTimes; //A vector to hold our wait times
 vector<int> turnaroundTimes; //A vector to hold our turnaround times
 
+
 int time_quantum = 0;
 std::vector<PCB> RRSchedule; //Our schedule, unaltered for a FCFS as the processes will be executed in order
-std::vector<PCB> RRScheduleSaved;
+std::vector<std::tuple<PCB, int, int>> RRScheduleSaved;
 SchedulerRR::SchedulerRR(int tq)
 {
    //TODO Constructor
@@ -35,12 +38,11 @@ void SchedulerRR::init(std::vector<PCB>& process_list)
 {
 
     RRSchedule = process_list; //store our process list within our schedule
-    RRScheduleSaved = process_list; //preserve for result printing
-    
 }
+
 void SchedulerRR::print_results()
 {
-
+    cout << "Print" << endl;
     float averageWait = 0;
     float averageTurnaround = 0;
 
@@ -60,8 +62,9 @@ void SchedulerRR::print_results()
 
 void SchedulerRR::simulate()
 {
+    int count = RRSchedule.size();
     PCB running = RRSchedule.front();
-    while(RRSchedule.size() > 0) //we loop until we exaust all processes
+    while(count > 0) //we loop until we exaust all processes
     {
         running = RRSchedule.front(); //get the first element in our schedule
         if(running.burst_time > time_quantum) //check if its runtime excedes the tq
@@ -75,6 +78,7 @@ void SchedulerRR::simulate()
         {
             cout << "Running Process " << running.name<<" for " << running.burst_time << " time units" << endl;
             RRSchedule.erase(RRSchedule.begin());//remove it from the queue. execution is finished
+            count--;
         }
     }
 }
