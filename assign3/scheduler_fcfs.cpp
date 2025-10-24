@@ -25,18 +25,8 @@ SchedulerFCFS::~SchedulerFCFS(){
 
 void SchedulerFCFS::init(std::vector<PCB>& process_list){
 
-int time = 0; //Tracks current time units
-
 fcfsSchedule = process_list; //store our process list within our schedule
 
-for (int i = 0; i < process_list.size(); i++){
-
-   cout << "Running Process " << process_list[i].name << " for " << process_list[i].burst_time << " time units" << endl;
-   waitTimes.push_back(time);
-   time = time + process_list[i].burst_time;
-   turnaroundTimes.push_back(time); 
-
-   }
 }
 
 void SchedulerFCFS::print_results(){
@@ -55,8 +45,19 @@ for (int i = 0; i < fcfsSchedule.size(); i++){
 }
 
 void SchedulerFCFS::simulate(){
-for (int i = 0; i < fcfsSchedule.size(); i++){
-   cout << fcfsSchedule[i].name << " turnaround time = " << turnaroundTimes[i] << ", waiting time = " << waitTimes[i] << endl;
+
+   int time = 0; //Acts as a clock, tracks current time units
+
+   for (int i = 0; i < fcfsSchedule.size(); i++){
+
+   cout << "Running Process " << fcfsSchedule[i].name << " for " << fcfsSchedule[i].burst_time << " time units" << endl;
+   waitTimes.push_back(time); //pushes back the time before execution to our list of wait times, this serves as the processes wait
+   time = time + fcfsSchedule[i].burst_time; //"runs" the process, adds its burst time to the clock
+   turnaroundTimes.push_back(time); //pushes back the turnaround time to our list of turnaround times
+
+   }
+
+for (int i = 0; i < fcfsSchedule.size(); i++){ //prints each process' name, turnaround time and wait time. Since theyre all in order already we can cycle through "i"
+   cout << fcfsSchedule[i].name << " turnaround time = " << turnaroundTimes[i] << ", waiting time = " << waitTimes[i] << endl; 
    }
 }
-// member functions init, print_results, and simulate here
