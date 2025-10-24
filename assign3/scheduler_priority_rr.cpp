@@ -1,8 +1,8 @@
 /**
 * Assignment 3: CPU Scheduler
- * @file scheduler_rr.h
- * @author ??? (TODO: your name)
- * @brief This Scheduler class implements the RoundRobin (RR) scheduling algorithm.
+ * @file scheduler_priority_rr.cpp
+ * @author Brynn Grofcsik, Bijan Moradi
+ * @brief This Scheduler class implements the Priority RR scheduling algorithm.
  * @version 0.1
  */
 //You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
