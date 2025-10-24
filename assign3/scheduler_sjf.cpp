@@ -15,7 +15,7 @@
 #include <algorithm>
 
 
-std::vector<std::tuple<string, int, int>> finalList; //Process id, waittime, 
+std::vector<std::tuple<string, int, int>> finalList; //Process id, waittime, turnaround time
 std::vector<PCB> sjfSchedule; //Our schedule, sorted through a maxheap by burst time
 
 SchedulerSJF::SchedulerSJF(){
@@ -107,8 +107,6 @@ void SchedulerSJF::print_results(){
 void SchedulerSJF::simulate(){
 
 int count = sjfSchedule.size();
-
-//TODO: fix re-sort by PID
 
 for (int i = 0; i < count; i++){
    cout << get<0>(finalList[i]) << " turnaround time = " << get<2>(finalList[i]) << ", waiting time = " << get<1>(finalList[i]) << endl;
