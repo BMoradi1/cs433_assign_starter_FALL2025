@@ -74,7 +74,16 @@ void SchedulerPriorityRR::simulate()
     while(count > 0) //we loop until we exaust all processes
     {
         running = RRSchedule.front(); //get the first element in our schedule
-        if(count > 1 && running.burst_time > time_quantum && running.priority > RRSchedule[1].priority)
+        if(count == 1 && running.burst_time > time_quantum) 
+        {
+            cout << "Running Process " << running.name <<" for " << running.burst_time << " time units" << endl;
+            RRSchedule.erase(RRSchedule.begin());//remove it from the queue. execution is finished
+            time += running.burst_time; //add time passed to our clock
+            waitTime = time - RRScheduleSaved[running.id].burst_time; //In round robin, turnaround time - burst time = wait time.
+            finalList.push_back(tuple<PCB, int, int>(running,waitTime,time)); //Store our PCB, wait time and turnaround time in the final list for later reference
+            count--;
+        }
+        else if(count > 1 && running.burst_time > time_quantum && running.priority > RRSchedule[1].priority)
         {
             cout << "Running Process " << running.name <<" for " << running.burst_time << " time units" << endl;
             RRSchedule.erase(RRSchedule.begin());//remove it from the queue. execution is finished
@@ -92,7 +101,7 @@ void SchedulerPriorityRR::simulate()
             {
                 if(running.priority > RRSchedule[i].priority) //find where in the schedule to reinsert
                 {
-                    RRSchedule.insert(RRSchedule.begin()+1,running);
+                    RRSchedule.insert(RRSchedule.begin()+i,running);
                     break;
                 }
             }
