@@ -74,7 +74,7 @@ void SchedulerPriorityRR::simulate()
     while(count > 0) //we loop until we exaust all processes
     {
         running = RRSchedule.front(); //get the first element in our schedule
-        if(count == 1 && running.burst_time > time_quantum) 
+        if(count == 1 && running.burst_time > time_quantum ) //edgh
         {
             cout << "Running Process " << running.name <<" for " << running.burst_time << " time units" << endl;
             RRSchedule.erase(RRSchedule.begin());//remove it from the queue. execution is finished
