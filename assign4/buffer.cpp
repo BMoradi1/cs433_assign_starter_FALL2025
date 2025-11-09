@@ -47,7 +47,7 @@ bool insert_item(buffer_item *item)
 {
    if(!is_full())
    {
-      OurBuffer[bufferCount] = item;
+      OurBuffer[bufferCount - 1] = item;
       bufferCount++;
       return true;
    }
@@ -58,8 +58,8 @@ bool remove_item(buffer_item *item)
 {
    if(!is_empty())
    {
-      delete OurBuffer[bufferCount];
-      OurBuffer[bufferCount] = NULL;
+      delete OurBuffer[bufferCount - 1];
+      OurBuffer[bufferCount - 1] = NULL;
       bufferCount--;
       return true;
    }
@@ -105,7 +105,7 @@ void print_buffer()
    arrayPrint.append("Buffer: [");
    for(int i = 0; i < bufferCount; i++)
    {
-      arrayPrint.append(std::to_string(OurBuffer[i]));
+      arrayPrint.append(std::to_string((int)OurBuffer[i]));
       arrayPrint.append(", ");
    }
    arrayPrint.erase(arrayPrint.size() - 2); //removes the last comma and space
