@@ -53,11 +53,17 @@ bool insert_item(buffer_item *item)
    }
    return false;
 }
-//Removes an item from the buffer, On successful insertion return true.
+//Removes an item from the buffer, On successful deletion return true.
 bool remove_item(buffer_item *item)
 {
-   if(is_empty())
-   {}
+   if(!is_empty())
+   {
+      delete OurBuffer[bufferCount];
+      OurBuffer[bufferCount] = NULL;
+      bufferCount--;
+      return true;
+   }
+   return false;
 }
 
 //Returns size of the buffer; how many items it can hold
