@@ -110,6 +110,7 @@ void print_buffer()
    }
    arrayPrint.erase(arrayPrint.size() - 2); //removes the last comma and space
    arrayPrint.append("]");
+   std::cout << arrayPrint << std::endl;
 }
 // You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
 // Remember to add sufficient and clear comments to your code
