@@ -21,14 +21,14 @@
 
 
 //Buffer Object and Global Variables
-buffer_item **OurBuffer = new buffer_item*[0];
+buffer_item **OurBuffer;
 int bufferCount = 0;
 int bufferSize = 0;
 
  //Constructor
 Buffer::Buffer(int size)
 {
-   buffer_item* OurBuffer = new buffer_item[size];
+   OurBuffer = new buffer_item*[size];
    bufferSize = size;
 }
 
