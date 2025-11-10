@@ -105,7 +105,7 @@ void print_buffer()
    arrayPrint.append("Buffer: [");
    for(int i = 0; i < bufferCount; i++)
    {
-      arrayPrint.append(std::to_string((int)OurBuffer[i]));
+      arrayPrint.append(std::to_string(*OurBuffer[i]));
       arrayPrint.append(", ");
    }
    arrayPrint.erase(arrayPrint.size() - 2); //removes the last comma and space
