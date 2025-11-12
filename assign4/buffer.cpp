@@ -36,10 +36,10 @@ Buffer::Buffer(int size)
 Buffer::~Buffer()
 {
    for(int i = 0; i < bufferSize;i++)
-   {
-      delete OurBuffer[i];
+    {
+       delete OurBuffer[i];
    }
-   delete OurBuffer;
+    delete [] OurBuffer;
 }
 
 //Inserts an item into the buffer, On successful insertion return true.
@@ -53,14 +53,23 @@ bool insert_item(buffer_item *item)
    }
    return false;
 }
+
 //Removes an item from the buffer, On successful deletion return true.
 bool remove_item(buffer_item *item)
 {
    if(!is_empty())
    {
-      delete OurBuffer[bufferCount - 1];
-      OurBuffer[bufferCount - 1] = NULL;
+      // delete OurBuffer[bufferCount - 1];
+      // OurBuffer[bufferCount - 1] = NULL;
+
+      buffer_item **newArray = new buffer_item*[bufferCount - 1];
+      for(int i = 0; i < bufferCount - 1; i++){
+         newArray[i] = OurBuffer[i];
+      }
+
+      OurBuffer = newArray;
       bufferCount--;
+      
       return true;
    }
    return false;
@@ -112,7 +121,4 @@ void print_buffer()
    arrayPrint.append("]");
    std::cout << arrayPrint << std::endl;
 }
-// You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
-// Remember to add sufficient and clear comments to your code
 
-// TODO: Add your implementation of the buffer class here

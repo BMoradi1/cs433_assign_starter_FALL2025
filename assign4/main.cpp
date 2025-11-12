@@ -28,6 +28,7 @@ void *producer(void *param) {
         /* sleep for a random period of time */
         usleep(rand()%1000000);
         // TODO: Add synchronization code here
+        item = rand(); //generates a random item (zybooks)
         if (buffer.insert_item(item)) {
             cout << "Producer " << item << ": Inserted item " << item << endl;
             buffer.print_buffer();
