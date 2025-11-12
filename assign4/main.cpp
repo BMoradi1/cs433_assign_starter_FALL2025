@@ -9,10 +9,13 @@
 // Remember to add sufficient and clear comments to your code
 #include <iostream>
 #include "buffer.h"
+#include <cstring>
 #include <unistd.h>
 #include <pthread.h>
 
 using namespace std;
+
+#define NUM_THREADS 5
 
 // global buffer object
 Buffer buffer;

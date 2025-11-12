@@ -42,39 +42,6 @@ Buffer::~Buffer()
     delete [] OurBuffer;
 }
 
-//Inserts an item into the buffer, On successful insertion return true.
-bool insert_item(buffer_item *item)
-{
-   if(!is_full())
-   {
-      OurBuffer[bufferCount - 1] = item;
-      bufferCount++;
-      return true;
-   }
-   return false;
-}
-
-//Removes an item from the buffer, On successful deletion return true.
-bool remove_item(buffer_item *item)
-{
-   if(!is_empty())
-   {
-      // delete OurBuffer[bufferCount - 1];
-      // OurBuffer[bufferCount - 1] = NULL;
-
-      buffer_item **newArray = new buffer_item*[bufferCount - 1];
-      for(int i = 0; i < bufferCount - 1; i++){
-         newArray[i] = OurBuffer[i];
-      }
-
-      OurBuffer = newArray;
-      bufferCount--;
-      
-      return true;
-   }
-   return false;
-}
-
 //Returns size of the buffer; how many items it can hold
 int get_size()
 {
@@ -106,6 +73,38 @@ bool is_full()
    }
 return false;
 }
+//Inserts an item into the buffer, On successful insertion return true.
+bool insert_item(buffer_item *item)
+{
+   if(is_full() == false)
+   {
+      OurBuffer[bufferCount] = item; //if the count is zero, then the first index is zero
+      bufferCount++;
+      return true;
+   }
+   return false;
+}
+
+//Removes an item from the buffer, On successful deletion return true.
+bool remove_item(buffer_item *item)
+{
+   buffer_item **tempBuffer = new buffer_item*[bufferCount];
+   if(is_empty() == false)
+   {
+      *item = *OurBuffer[0]; //Item to be removed is the first in buffer
+      delete OurBuffer[0]; //delete the first item
+
+      // Shift the remaining items forward
+      for (int i = 1; i < bufferCount; i++) {
+         OurBuffer[i - 1] = OurBuffer[i];
+      }
+      bufferCount--;
+
+      return true;
+   }
+   return false;
+}
+
 
 //Prints a list of items in the buffer
 void print_buffer()
