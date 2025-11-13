@@ -88,19 +88,18 @@ bool insert_item(buffer_item *item)
 //Removes an item from the buffer, On successful deletion return true.
 bool remove_item(buffer_item *item)
 {
-   buffer_item **tempBuffer = new buffer_item*[bufferCount];
    if(is_empty() == false)
    {
-      *item = *OurBuffer[0]; //Item to be removed is the first in buffer
-      delete OurBuffer[0]; //delete the first item
-
-      // Shift the remaining items forward
-      for (int i = 1; i < bufferCount; i++) {
-         OurBuffer[i - 1] = OurBuffer[i];
+      for(int i = 0; i < bufferCount; i++)
+      {
+         if(OurBuffer[i] == item)
+         {
+            delete OurBuffer[i];
+            OurBuffer[i] == NULL;
+         }
+        
       }
-      bufferCount--;
 
-      return true;
    }
    return false;
 }
