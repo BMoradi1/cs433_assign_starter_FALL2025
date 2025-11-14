@@ -61,7 +61,7 @@ void *producer(void *param) {
 // Consumer thread function
 // TODO: Add your implementation of the consumer thread here
 void *consumer(void *param) {
-    buffer_item item;
+    buffer_item item = *((int *) param);
     while (true) {
         /* sleep for a random period of time */
         
