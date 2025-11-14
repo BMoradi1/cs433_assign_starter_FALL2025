@@ -77,7 +77,7 @@ bool Buffer::insert_item(buffer_item item)
    {
       OurBuffer[bufferCount] = item; //if the count is zero, then the first index is zero
       bufferCount++;
-      cout << "Added item!" << endl;
+      //cout << "Added item!" << endl;
       return true;
    }
    return false;
@@ -90,14 +90,14 @@ bool Buffer::remove_item(buffer_item *item)
    {
       for(int i = 0; i < bufferCount; i++)
       {
-         cout << "Checking: " << OurBuffer[i] << "Against: " << *item << endl;
+        //cout << "Checking: " << OurBuffer[i] << "Against: " << *item << endl;
          if(OurBuffer[i] == *item)
          {
             
             OurBuffer[i] = NULL;
          }
       }
-      cout << "Consumed item!" << endl;
+      //cout << "Consumed item!" << endl;
       bufferCount--;
       return true;
    }
@@ -115,10 +115,11 @@ void Buffer::print_buffer()
       if(OurBuffer[i] != NULL)
       {
          arrayPrint.append(std::to_string(OurBuffer[i]));
-         arrayPrint.append(", ");
+         if(i < bufferCount - 1)
+            arrayPrint.append(", ");
       }
    }
-   arrayPrint.erase(arrayPrint.size() - 2); //removes the last comma and space
+   //arrayPrint.erase(arrayPrint.size() - 2); //removes the last comma and space
    arrayPrint.append("]");
    std::cout << arrayPrint << std::endl;
 }
