@@ -23,7 +23,7 @@ using namespace std;
 Buffer buffer;
 
 //Semaphore declaration 
-sem_t mutex;
+sem_t mutexSem;
 sem_t emptySem;
 sem_t fullSem;
 
@@ -41,7 +41,7 @@ void *producer(void *param) {
 
         // TODO: Add synchronization code here
         sem_wait(&emptySem);
-        sem_wait(&mutex);
+        sem_wait(&mutexSem);
 
         cout << "hit" <<endl;
 
@@ -52,7 +52,7 @@ void *producer(void *param) {
             cout << "Producer error condition"  << endl;    // shouldn't come here
         }
 
-        sem_post(&mutex);
+        sem_post(&mutexSem);
         sem_post(&fullSem);
 
     }
@@ -68,7 +68,7 @@ void *consumer(void *param) {
         usleep(rand() % 1000000);
 
         sem_wait(&fullSem);
-        sem_wait(&mutex);
+        sem_wait(&mutexSem);
 
         cout << "hit2" <<endl;
 
@@ -79,7 +79,7 @@ void *consumer(void *param) {
         } else {
             cout << "Consumer error condition" << endl;    // shouldn't come here
         }
-        sem_post(&mutex);
+        sem_post(&mutexSem);
         sem_post(&emptySem);
     }
 }
@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
     int consumerThreads(atoi(argv[3])); //number of consumer threads
 
     /* TODO: 2. Initialize buffer and synchronization primitives */
-    sem_init(&mutex,0, 1);
+    sem_init(&mutexSem,0, 1);
     sem_init(&emptySem, 0, buffer.get_size());
     sem_init(&fullSem, 0, 0);
 
@@ -108,6 +108,7 @@ int main(int argc, char *argv[]) {
     pthread_t consumerArray[consumerThreads];
     for(int i = 0; i < consumerThreads; i++){
         int *id = new int(i + 1); //Thread ID, starting from 1
+        //cout << "creating"<<endl;
         pthread_create(&consumerArray[i], NULL, consumer, (void *)id);
     }
 
