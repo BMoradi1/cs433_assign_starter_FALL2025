@@ -62,9 +62,9 @@ void *producer(void *param) {
 // TODO: Add your implementation of the consumer thread here
 void *consumer(void *param) {
     buffer_item item;
-
     while (true) {
         /* sleep for a random period of time */
+        
         usleep(rand() % 1000000);
 
         sem_wait(&fullSem);
@@ -91,6 +91,8 @@ int main(int argc, char *argv[]) {
     int producerThreads(atoi(argv[2])); //number of producer threads
     int consumerThreads(atoi(argv[3])); //number of consumer threads
 
+    cout<<"Producer: " << producerThreads << " Consumer: " << consumerThreads << " sleep: " << sleep<<endl;
+
     /* TODO: 2. Initialize buffer and synchronization primitives */
     sem_init(&mutexSem,0, 1);
     sem_init(&emptySem, 0, buffer.get_size());
@@ -113,7 +115,7 @@ int main(int argc, char *argv[]) {
     }
 
     /* TODO: 5. Main thread sleep */
-    usleep(sleep);
+    usleep(sleep * 1000000);
 
     /* TODO: 6. Exit */
     printf("Exiting\n");

@@ -21,24 +21,21 @@ using namespace std;
 
 
 //Buffer Object and Global Variables
-buffer_item **OurBuffer;
+buffer_item *OurBuffer;
 int bufferCount = 0;
 int bufferSize = 0;
 
  //Constructor
 Buffer::Buffer(int size)
 {
-   OurBuffer = new buffer_item*[size];
+   OurBuffer = new buffer_item[size];
    bufferSize = size;
 }
 
 //Deconstructor
 Buffer::~Buffer()
 {
-   for(int i = 0; i < bufferSize;i++)
-    {
-       delete OurBuffer[i];
-   }
+  
     delete [] OurBuffer;
 }
 
@@ -67,7 +64,7 @@ return false;
 //Checks if buffer is full
 bool Buffer::is_full()
 {
-   if(bufferCount >= bufferSize)
+   if(bufferCount == bufferSize)
    {
       return true;
    }
@@ -78,7 +75,7 @@ bool Buffer::insert_item(buffer_item item)
 {
    if(is_full() == false)
    {
-      OurBuffer[bufferCount] = &item; //if the count is zero, then the first index is zero
+      OurBuffer[bufferCount] = item; //if the count is zero, then the first index is zero
       bufferCount++;
       cout << "Added item!" << endl;
       return true;
@@ -93,9 +90,9 @@ bool Buffer::remove_item(buffer_item *item)
    {
       for(int i = 0; i < bufferCount; i++)
       {
-         if(OurBuffer[i] == item)
+         if(&OurBuffer[i] == item)
          {
-            delete OurBuffer[i];
+            
             OurBuffer[i] = NULL;
          }
       }
@@ -113,7 +110,7 @@ void Buffer::print_buffer()
    arrayPrint.append("Buffer: [");
    for(int i = 0; i < bufferCount; i++)
    {
-      arrayPrint.append(std::to_string(*OurBuffer[i]));
+      arrayPrint.append(std::to_string(OurBuffer[i]));
       arrayPrint.append(", ");
    }
    arrayPrint.erase(arrayPrint.size() - 2); //removes the last comma and space
