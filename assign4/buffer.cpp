@@ -17,7 +17,7 @@
 
 #include "buffer.h"
 #include <iostream>
-//using namespace std;
+using namespace std;
 
 
 //Buffer Object and Global Variables
@@ -43,19 +43,19 @@ Buffer::~Buffer()
 }
 
 //Returns size of the buffer; how many items it can hold
-int get_size()
+int Buffer::get_size()
 {
  return bufferSize;
 }
 
 //Returns the count of the number of items currently in buffer
-int get_count()
+int Buffer::get_count()
 {
    return bufferCount;
 }
 
 //Checks if buffer is empty
-bool is_empty()
+bool Buffer::is_empty()
 {
    if(bufferCount <= 0)
    {
@@ -65,7 +65,7 @@ return false;
 }
 
 //Checks if buffer is full
-bool is_full()
+bool Buffer::is_full()
 {
    if(bufferCount >= bufferSize)
    {
@@ -74,19 +74,20 @@ bool is_full()
 return false;
 }
 //Inserts an item into the buffer, On successful insertion return true.
-bool insert_item(buffer_item *item)
+bool Buffer::insert_item(buffer_item item)
 {
    if(is_full() == false)
    {
-      OurBuffer[bufferCount] = item; //if the count is zero, then the first index is zero
+      OurBuffer[bufferCount] = &item; //if the count is zero, then the first index is zero
       bufferCount++;
+      cout << "Added item!" << endl;
       return true;
    }
    return false;
 }
 
 //Removes an item from the buffer, On successful deletion return true.
-bool remove_item(buffer_item *item)
+bool Buffer::remove_item(buffer_item *item)
 {
    if(is_empty() == false)
    {
@@ -95,18 +96,18 @@ bool remove_item(buffer_item *item)
          if(OurBuffer[i] == item)
          {
             delete OurBuffer[i];
-            OurBuffer[i] == NULL;
+            OurBuffer[i] = NULL;
          }
-        
       }
-
+      cout << "Consumed item!" << endl;
+      return true;
    }
    return false;
 }
 
 
 //Prints a list of items in the buffer
-void print_buffer()
+void Buffer::print_buffer()
 {
    std::string arrayPrint;
    arrayPrint.append("Buffer: [");

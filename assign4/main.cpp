@@ -24,8 +24,8 @@ Buffer buffer;
 
 //Semaphore declaration 
 sem_t mutex;
-sem_t fullSem;
 sem_t emptySem;
+sem_t fullSem;
 
 
 // Producer thread function
@@ -38,18 +38,22 @@ void *producer(void *param) {
     while (true) {
         /* sleep for a random period of time */
         usleep(rand()%1000000);
+
         // TODO: Add synchronization code here
-        //item = rand(); //generates a random item (zybooks)
         sem_wait(&emptySem);
         sem_wait(&mutex);
+
+        cout << "hit" <<endl;
+
         if (buffer.insert_item(item)) {
             cout << "Producer " << item << ": Inserted item " << item << endl;
             buffer.print_buffer();
         } else {
             cout << "Producer error condition"  << endl;    // shouldn't come here
         }
+
         sem_post(&mutex);
-        sem_post(&emptySem);
+        sem_post(&fullSem);
 
     }
 }
@@ -62,8 +66,12 @@ void *consumer(void *param) {
     while (true) {
         /* sleep for a random period of time */
         usleep(rand() % 1000000);
+
         sem_wait(&fullSem);
         sem_wait(&mutex);
+
+        cout << "hit2" <<endl;
+
         // TODO: Add synchronization code here
         if (buffer.remove_item(&item)) {
             cout << "Consumer " << item << ": Removed item " << item << endl;
@@ -79,39 +87,34 @@ void *consumer(void *param) {
 int main(int argc, char *argv[]) {
 
     /* TODO: 1. Get command line arguments argv[1],argv[2],argv[3] */
-    
     int sleep = atoi(argv[1]); //how long the main thread sleeps before terminating 
     int producerThreads(atoi(argv[2])); //number of producer threads
     int consumerThreads(atoi(argv[3])); //number of consumer threads
 
-    sem_init(&mutex,0, 1);
-    sem_init(&fullSem,0 , 0);
-    sem_init(&emptySem, 0, NULL);
-    
-    int i, scope;
-    pthread_t tid[NUM_THREADS];
-    pthread_attr_t attr; 
-    int uniqueID = 1;
-    /* Default Attributes*/
-    pthread_attr_init(&attr);
-
-    if(pthread_attr_getscope(&attr, &scope) != 0)
-    {
-        cerr << "Unable to get scheduling scope\n" << endl;
-    }
-    else 
-    {
-        if (scope = PTHREAD_SCOPE_PROCESS)
-        printf("PTHREAD_SCOPE_PROCESS\n");
-        else if (scope = PTHREAD_SCOPE_SYSTEM)
-        printf("PTHREAD_SCOPE_SYSTEM\n");
-        else 
-        fprintf(stderr, "Illegal scope value.\n");
-    }
     /* TODO: 2. Initialize buffer and synchronization primitives */
+    sem_init(&mutex,0, 1);
+    sem_init(&emptySem, 0, buffer.get_size());
+    sem_init(&fullSem, 0, 0);
+
     /* TODO: 3. Create producer thread(s).
      * You should pass an unique int ID to each producer thread, starting from 1 to number of threads */
+    pthread_t producerArray[producerThreads];
+    for(int i = 0; i < producerThreads; i++){
+        int *id = new int(i + 1); //Thread ID, starting from 1
+        pthread_create(&producerArray[i], NULL, producer, (void *)id);
+   }
+
     /* TODO: 4. Create consumer thread(s) */
+    pthread_t consumerArray[consumerThreads];
+    for(int i = 0; i < consumerThreads; i++){
+        int *id = new int(i + 1); //Thread ID, starting from 1
+        pthread_create(&consumerArray[i], NULL, consumer, (void *)id);
+    }
+
     /* TODO: 5. Main thread sleep */
+    usleep(sleep);
+
     /* TODO: 6. Exit */
+    printf("Exiting\n");
+    exit(1);
 }
