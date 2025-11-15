@@ -93,12 +93,12 @@ bool Buffer::remove_item(buffer_item *item)
          cout << "Checking: " << OurBuffer[i] << "Against: " << *item << endl;
          if(OurBuffer[i] == *item)
          {
-            
+            cout << "Consumed item!" << endl;
+            bufferCount--;
             OurBuffer[i] = NULL;
          }
       }
-      cout << "Consumed item!" << endl;
-      bufferCount--;
+      
       return true;
    }
    return false;
@@ -115,10 +115,11 @@ void Buffer::print_buffer()
       if(OurBuffer[i] != NULL)
       {
          arrayPrint.append(std::to_string(OurBuffer[i]));
-         arrayPrint.append(", ");
+         if(i < bufferCount-1)
+            arrayPrint.append(", ");
       }
    }
-   arrayPrint.erase(arrayPrint.size() - 2); //removes the last comma and space
+   //arrayPrint.erase(arrayPrint.size() - 2); //removes the last comma and space
    arrayPrint.append("]");
    std::cout << arrayPrint << std::endl;
 }
