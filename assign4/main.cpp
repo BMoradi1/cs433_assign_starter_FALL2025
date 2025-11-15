@@ -43,7 +43,7 @@ void *producer(void *param) {
         sem_wait(&emptySem);
         sem_wait(&mutexSem);
 
-        cout << "hit" <<endl;
+        //cout << "hit" <<endl;
 
         if (buffer.insert_item(item)) {
             cout << "Producer " << item << ": Inserted item " << item << endl;
@@ -70,7 +70,7 @@ void *consumer(void *param) {
         sem_wait(&fullSem);
         sem_wait(&mutexSem);
 
-        cout << "hit2" <<endl;
+        //cout << "hit2" <<endl;
 
         // TODO: Add synchronization code here
         if (buffer.remove_item(&item)) {
@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
     int producerThreads(atoi(argv[2])); //number of producer threads
     int consumerThreads(atoi(argv[3])); //number of consumer threads
 
-    cout<<"Producer: " << producerThreads << " Consumer: " << consumerThreads << " sleep: " << sleep<<endl;
+    //cout<<"Producer: " << producerThreads << " Consumer: " << consumerThreads << " sleep: " << sleep<<endl;
 
     /* TODO: 2. Initialize buffer and synchronization primitives */
     sem_init(&mutexSem,0, 1);

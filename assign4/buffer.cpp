@@ -77,7 +77,7 @@ bool Buffer::insert_item(buffer_item item)
    {
       OurBuffer[bufferCount] = item; //if the count is zero, then the first index is zero
       bufferCount++;
-      cout << "Added item!" << endl;
+      //cout << "Added item!" << endl;
       return true;
    }
    return false;
@@ -86,6 +86,7 @@ bool Buffer::insert_item(buffer_item item)
 //Removes an item from the buffer, On successful deletion return true.
 bool Buffer::remove_item(buffer_item *item)
 {
+   /*
    cout << "Removing item: "<< *item<<endl;
    if(is_empty() == false)
    {
@@ -100,9 +101,15 @@ bool Buffer::remove_item(buffer_item *item)
             return true;
          }
       }
-      
-      
+   */
+   if(!is_empty())
+   {
+      *item = OurBuffer[bufferCount - 1];
+      bufferCount--;
+      return true;
    }
+      
+   
    return false;
 }
 
