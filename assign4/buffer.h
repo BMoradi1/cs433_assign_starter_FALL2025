@@ -31,6 +31,8 @@ public:
      */
     ~Buffer();
 
+    buffer_item getBufferFront();
+
     /**
      * @brief Insert an item into the buffer
      * @param item the item to insert

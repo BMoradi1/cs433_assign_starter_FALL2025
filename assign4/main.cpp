@@ -23,7 +23,7 @@ using namespace std;
 Buffer buffer;
 
 //Semaphore declaration 
-sem_t mutexSem;
+pthread_mutex_t mutexSem;
 sem_t emptySem;
 sem_t fullSem;
 
@@ -41,7 +41,7 @@ void *producer(void *param) {
 
         // TODO: Add synchronization code here
         sem_wait(&emptySem);
-        sem_wait(&mutexSem);
+        pthread_mutex_lock(&mutexSem);
 
         //cout << "hit" <<endl;
 
@@ -52,7 +52,7 @@ void *producer(void *param) {
             cout << "Producer error condition"  << endl;    // shouldn't come here
         }
 
-        sem_post(&mutexSem);
+        pthread_mutex_unlock(&mutexSem);
         sem_post(&fullSem);
 
     }
@@ -61,25 +61,26 @@ void *producer(void *param) {
 // Consumer thread function
 // TODO: Add your implementation of the consumer thread here
 void *consumer(void *param) {
-    buffer_item item = *((int *) param);
+    buffer_item item;
     while (true) {
         /* sleep for a random period of time */
         
         usleep(rand() % 1000000);
 
         sem_wait(&fullSem);
-        sem_wait(&mutexSem);
+        pthread_mutex_lock(&mutexSem);
+
+        item = buffer.getBufferFront();
 
         //cout << "hit2" <<endl;
-
         // TODO: Add synchronization code here
         if (buffer.remove_item(&item)) {
-            cout << "Consumer " << item << ": Removed item " << item << endl;
+            cout << "Consumer " << ": Removed item " << item << endl;
             buffer.print_buffer();
         } else {
             cout << "Consumer error condition" << endl;    // shouldn't come here
         }
-        sem_post(&mutexSem);
+        pthread_mutex_unlock(&mutexSem);
         sem_post(&emptySem);
     }
 }
@@ -94,7 +95,7 @@ int main(int argc, char *argv[]) {
     //cout<<"Producer: " << producerThreads << " Consumer: " << consumerThreads << " sleep: " << sleep<<endl;
 
     /* TODO: 2. Initialize buffer and synchronization primitives */
-    sem_init(&mutexSem,0, 1);
+    pthread_mutex_init(&mutexSem, NULL);
     sem_init(&emptySem, 0, buffer.get_size());
     sem_init(&fullSem, 0, 0);
 

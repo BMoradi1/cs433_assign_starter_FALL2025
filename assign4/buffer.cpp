@@ -11,6 +11,7 @@
 */
 
 #include "buffer.h"
+#include <queue>
 #include <iostream>
 using namespace std;
 
@@ -32,8 +33,11 @@ Buffer::Buffer(int size)
 //Deconstructor
 Buffer::~Buffer()
 {
-  
     delete [] OurBuffer;
+}
+
+buffer_item Buffer::getBufferFront(){
+   return OurBuffer[0];
 }
 
 //Returns size of the buffer; how many items it can hold
@@ -72,9 +76,8 @@ bool Buffer::insert_item(buffer_item item)
 {
    if(is_full() == false)
    {
-      OurBuffer[in] = item; //if the count is zero, then the first index is zero
+      OurBuffer[bufferCount] = item; //if the count is zero, then the first index is zero
       bufferCount++;
-      in = (in + 1)%bufferSize;
       //cout << "Added item!" << endl;
       return true;
    }
@@ -84,31 +87,15 @@ bool Buffer::insert_item(buffer_item item)
 //Removes an item from the buffer, On successful deletion return true.
 bool Buffer::remove_item(buffer_item *item)
 {
-   /*
-   cout << "Removing item: "<< *item<<endl;
-   if(is_empty() == false)
-   {
-      for(int i = bufferCount - 1; i >= 0; i--)
-      {
-         cout << "Checking Buffer: " << OurBuffer[i] << "Against Removal Item: " << *item << " WITH BUFFER COUNT " << bufferCount <<endl;
-         if(OurBuffer[i] == *item)
-         {
-            cout << "Consumed item!" << endl;
-            bufferCount--;
-            OurBuffer[i] = NULL;
-            return true;
-         }
-      }
-   */
    if(!is_empty())
-   {
-      *item = OurBuffer[out]; //pass item out as parameter as per zybook
-      out = (out + 1)%bufferSize;
+   { 
+      *item = OurBuffer[0];
+      for(int i = 0; i < bufferCount - 1; i++) {
+         OurBuffer[i] = OurBuffer[i + 1];
+      }
       bufferCount--;
       return true;
    }
-      
-   
    return false;
 }
 
