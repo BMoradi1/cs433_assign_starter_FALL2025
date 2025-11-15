@@ -86,20 +86,22 @@ bool Buffer::insert_item(buffer_item item)
 //Removes an item from the buffer, On successful deletion return true.
 bool Buffer::remove_item(buffer_item *item)
 {
+   cout << "Removing item: "<< *item<<endl;
    if(is_empty() == false)
    {
-      for(int i = 0; i < bufferCount; i++)
+      for(int i = bufferCount - 1; i >= 0; i--)
       {
-         cout << "Checking: " << OurBuffer[i] << "Against: " << *item << endl;
+         cout << "Checking Buffer: " << OurBuffer[i] << "Against Removal Item: " << *item << " WITH BUFFER COUNT " << bufferCount <<endl;
          if(OurBuffer[i] == *item)
          {
             cout << "Consumed item!" << endl;
             bufferCount--;
             OurBuffer[i] = NULL;
+            return true;
          }
       }
       
-      return true;
+      
    }
    return false;
 }
