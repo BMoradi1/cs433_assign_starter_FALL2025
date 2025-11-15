@@ -19,6 +19,8 @@ using namespace std;
 buffer_item *OurBuffer;
 int bufferCount = 0;
 int bufferSize = 0;
+int in = 0;
+int out = 0;
 
  //Constructor
 Buffer::Buffer(int size)
@@ -70,8 +72,9 @@ bool Buffer::insert_item(buffer_item item)
 {
    if(is_full() == false)
    {
-      OurBuffer[bufferCount] = item; //if the count is zero, then the first index is zero
+      OurBuffer[in] = item; //if the count is zero, then the first index is zero
       bufferCount++;
+      in = (in + 1)%bufferSize;
       //cout << "Added item!" << endl;
       return true;
    }
@@ -99,7 +102,8 @@ bool Buffer::remove_item(buffer_item *item)
    */
    if(!is_empty())
    {
-      *item = OurBuffer[bufferCount - 1]; //pass item out as parameter as per zybook
+      *item = OurBuffer[out]; //pass item out as parameter as per zybook
+      out = (out + 1)%bufferSize;
       bufferCount--;
       return true;
    }
