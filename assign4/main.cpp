@@ -118,6 +118,6 @@ int main(int argc, char *argv[]) {
     usleep(sleep * 1000000);
 
     /* TODO: 6. Exit */
-    printf("Exiting\n");
+   // printf("Exiting\n");
     exit(1);
 }
