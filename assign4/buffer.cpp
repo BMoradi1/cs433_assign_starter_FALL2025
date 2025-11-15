@@ -99,7 +99,7 @@ bool Buffer::remove_item(buffer_item *item)
    */
    if(!is_empty())
    {
-      *item = OurBuffer[bufferCount - 1];
+      *item = OurBuffer[bufferCount - 1]; //pass item out as parameter as per zybook
       bufferCount--;
       return true;
    }
