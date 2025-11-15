@@ -121,12 +121,11 @@ void Buffer::print_buffer()
    arrayPrint.append("Buffer: [");
    for(int i = 0; i < bufferCount; i++)
    {
-      if(OurBuffer[i] != NULL)
-      {
+      
          arrayPrint.append(std::to_string(OurBuffer[i]));
          if(i < bufferCount-1)
             arrayPrint.append(", ");
-      }
+      
    }
    //arrayPrint.erase(arrayPrint.size() - 2); //removes the last comma and space
    arrayPrint.append("]");
