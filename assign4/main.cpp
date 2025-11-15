@@ -86,7 +86,7 @@ void *consumer(void *param) {
 
 int main(int argc, char *argv[]) {
 
-   
+    /* TODO: 1. Get command line arguments argv[1],argv[2],argv[3] */
     int sleep = atoi(argv[1]); //how long the main thread sleeps before terminating 
     int producerThreads(atoi(argv[2])); //number of producer threads
     int consumerThreads(atoi(argv[3])); //number of consumer threads
