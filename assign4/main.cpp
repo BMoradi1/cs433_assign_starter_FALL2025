@@ -75,7 +75,7 @@ void *consumer(void *param) {
         //cout << "hit2" <<endl;
         // TODO: Add synchronization code here
         if (buffer.remove_item(&item)) {
-            cout << "Consumer " << ": Removed item " << item << endl;
+            cout << "Consumer Removed item " << item << endl;
             buffer.print_buffer();
         } else {
             cout << "Consumer error condition" << endl;    // shouldn't come here
@@ -120,5 +120,5 @@ int main(int argc, char *argv[]) {
 
     /* TODO: 6. Exit */
    // printf("Exiting\n");
-    exit(1);
+    exit(0);
 }
