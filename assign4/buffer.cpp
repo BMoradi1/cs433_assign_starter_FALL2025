@@ -1,7 +1,7 @@
 /**
 * Assignment 4: Producer Consumer Problem
  * @file buffer.cpp
- * @author ??? (TODO: your name)
+ * @author Brynn Grofcsik & Bijan Moradi
  * @brief Implementation file for the buffer class
  * @version 0.1
  *
@@ -17,8 +17,8 @@ using namespace std;
 
 
 //Buffer Object and Global Variables
-buffer_item *OurBuffer;
-int bufferCount = 0;
+buffer_item *OurBuffer; 
+int bufferCount = 0; 
 int bufferSize = 0;
 int in = 0;
 int out = 0;
@@ -36,7 +36,9 @@ Buffer::~Buffer()
     delete [] OurBuffer; 
 }
 
+//Implemented for FIFO purposes, returns the first object within our array
 buffer_item Buffer::getBufferFront(){
+
    return OurBuffer[0];
 }
 
@@ -71,23 +73,23 @@ bool Buffer::is_full()
    }
 return false;
 }
+
 //Inserts an item into the buffer, On successful insertion return true.
 bool Buffer::insert_item(buffer_item item)
 {
    if(is_full() == false)
    {
       OurBuffer[bufferCount] = item; //if the count is zero, then the first index is zero
-      bufferCount++;
-      //cout << "Added item!" << endl;
-      return true;
+      bufferCount++; //increase buffer count
+      return true; //successful
    }
-   return false;
+   return false; //unsuccessful 
 }
 
 //Removes an item from the buffer, On successful deletion return true.
 bool Buffer::remove_item(buffer_item *item)
 {
-   if(!is_empty())
+   if(!is_empty()) //ensure buffer isnt empty
    { 
       *item = OurBuffer[0]; //set item pointer to removed item as per zybook.
       for(int i = 0; i < bufferCount - 1; i++) {
@@ -103,17 +105,16 @@ bool Buffer::remove_item(buffer_item *item)
 //Prints a list of items in the buffer
 void Buffer::print_buffer()
 {
-   std::string arrayPrint;
+   std::string arrayPrint; //string array to hold our substring values
    arrayPrint.append("Buffer: [");
    for(int i = 0; i < bufferCount; i++)
    {
       
-         arrayPrint.append(std::to_string(OurBuffer[i]));
-         if(i < bufferCount-1)
+         arrayPrint.append(std::to_string(OurBuffer[i])); //add each buffer_item, since each is an int we can just use a to_string conversion
+         if(i < bufferCount-1) //add a comma and space after every buffer item except for the last one 
             arrayPrint.append(", ");
       
    }
-   //arrayPrint.erase(arrayPrint.size() - 2); //removes the last comma and space
    arrayPrint.append("]");
    std::cout << arrayPrint << std::endl;
 }

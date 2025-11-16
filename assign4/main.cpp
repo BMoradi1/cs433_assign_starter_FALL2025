@@ -1,35 +1,30 @@
 /**
 * Assignment 4: Producer Consumer Problem
  * @file main.cpp
- * @author ??? (TODO: your name)
+ * @author Brynn Grofcsik & Bijan Moradi
  * @brief The main program for the producer consumer problem.
  * @version 0.1
  */
-//You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
-// Remember to add sufficient and clear comments to your code
+
 #include <iostream>
 #include "buffer.h"
 #include <cstring>
-#include <unistd.h> //handles sleep
+#include <unistd.h> 
 #include <semaphore.h> 
 #include <pthread.h>
 
 using namespace std;
 
-#define NUM_THREADS 5
-
-
 // global buffer object
 Buffer buffer;
 
-//Semaphore declaration 
+//Lock and Semaphore declaration 
 pthread_mutex_t mutexSem;
 sem_t emptySem;
 sem_t fullSem;
 
 
 // Producer thread function
-// TODO: Add your implementation of the producer thread here
 void *producer(void *param) {
     // Each producer insert its own ID into the buffer
     // For example, thread 1 will insert 1, thread 2 will insert 2, and so on.
@@ -39,12 +34,14 @@ void *producer(void *param) {
         /* sleep for a random period of time */
         usleep(rand()%1000000);
 
-        // TODO: Add synchronization code here
+        //Lock empty sem and mutex lock. Code referenced from Zybooks
         sem_wait(&emptySem);
         pthread_mutex_lock(&mutexSem);
 
+        //debug to ensure code could be accessed after lock
         //cout << "hit" <<endl;
 
+        //critical section
         if (buffer.insert_item(item)) {
             cout << "Producer " << item << ": Inserted item " << item << endl;
             buffer.print_buffer();
@@ -52,6 +49,7 @@ void *producer(void *param) {
             cout << "Producer error condition"  << endl;    // shouldn't come here
         }
 
+        //release of both locks
         pthread_mutex_unlock(&mutexSem);
         sem_post(&fullSem);
 
@@ -63,23 +61,28 @@ void *producer(void *param) {
 void *consumer(void *param) {
     buffer_item item;
     while (true) {
+
         /* sleep for a random period of time */
-        
         usleep(rand() % 1000000);
 
+        //lock wait semaphore and mutex lock, code referenced from Zybooks
         sem_wait(&fullSem);
         pthread_mutex_lock(&mutexSem);
 
+        // critical section entered
+        //since this is a FIFO algorithm our item consumed will be at the first index currently within the buffer.
         item = buffer.getBufferFront();
 
+        //debug to check critical section functionality
         //cout << "hit2" <<endl;
-        // TODO: Add synchronization code here
         if (buffer.remove_item(&item)) {
             cout << "Consumer Removed item " << item << endl;
             buffer.print_buffer();
         } else {
             cout << "Consumer error condition" << endl;    // shouldn't come here
         }
+
+        //release of both locks 
         pthread_mutex_unlock(&mutexSem);
         sem_post(&emptySem);
     }
@@ -87,38 +90,34 @@ void *consumer(void *param) {
 
 int main(int argc, char *argv[]) {
 
-    /* TODO: 1. Get command line arguments argv[1],argv[2],argv[3] */
+    /* Get command line arguments argv[1],argv[2],argv[3] */
     int sleep = atoi(argv[1]); //how long the main thread sleeps before terminating 
     int producerThreads(atoi(argv[2])); //number of producer threads
     int consumerThreads(atoi(argv[3])); //number of consumer threads
 
-    //cout<<"Producer: " << producerThreads << " Consumer: " << consumerThreads << " sleep: " << sleep<<endl;
-
-    /* TODO: 2. Initialize buffer and synchronization primitives */
-    pthread_mutex_init(&mutexSem, NULL);
+    /* Initialization of mutex lock and semaphores */
+    pthread_mutex_init(&mutexSem, NULL); 
     sem_init(&emptySem, 0, buffer.get_size());
     sem_init(&fullSem, 0, 0);
 
-    /* TODO: 3. Create producer thread(s).
-     * You should pass an unique int ID to each producer thread, starting from 1 to number of threads */
-    pthread_t producerArray[producerThreads];
+    /* Creation of Producer Threads */
+    pthread_t producerArray[producerThreads]; //array of producer threads
     for(int i = 0; i < producerThreads; i++){
         int *id = new int(i + 1); //Thread ID, starting from 1
-        pthread_create(&producerArray[i], NULL, producer, (void *)id);
+        pthread_create(&producerArray[i], NULL, producer, (void *)id); //creation of each thread, built through producer function
    }
 
     /* TODO: 4. Create consumer thread(s) */
-    pthread_t consumerArray[consumerThreads];
+    pthread_t consumerArray[consumerThreads]; //array of consumer threads
     for(int i = 0; i < consumerThreads; i++){
         int *id = new int(i + 1); //Thread ID, starting from 1
         //cout << "creating"<<endl;
-        pthread_create(&consumerArray[i], NULL, consumer, (void *)id);
+        pthread_create(&consumerArray[i], NULL, consumer, (void *)id); //creation of each thread, built through consumer function
     }
 
-    /* TODO: 5. Main thread sleep */
+    /* Main thread sleep, multiply it by a million to convert given number into seconds*/
     usleep(sleep * 1000000);
 
-    /* TODO: 6. Exit */
-   // printf("Exiting\n");
+    /* Exit */
     exit(0);
 }
