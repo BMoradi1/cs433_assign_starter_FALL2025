@@ -33,7 +33,7 @@ Buffer::Buffer(int size)
 //Deconstructor
 Buffer::~Buffer()
 {
-    delete [] OurBuffer;
+    delete [] OurBuffer; 
 }
 
 buffer_item Buffer::getBufferFront(){
@@ -89,14 +89,14 @@ bool Buffer::remove_item(buffer_item *item)
 {
    if(!is_empty())
    { 
-      *item = OurBuffer[0];
+      *item = OurBuffer[0]; //set item pointer to removed item as per zybook.
       for(int i = 0; i < bufferCount - 1; i++) {
-         OurBuffer[i] = OurBuffer[i + 1];
+         OurBuffer[i] = OurBuffer[i + 1]; //shift everything to keep FIFO order
       }
-      bufferCount--;
+      bufferCount--; // keep track of our count
       return true;
    }
-   return false;
+   return false; //shouldn't come here
 }
 
 
