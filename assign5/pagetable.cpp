@@ -13,12 +13,16 @@
 // TODO: Add your implementation of PageTable
 // Constrcutor
 // TODO: Add your code
+int tableSize;
+
 PageTable::PageTable(int num_pages) {
-    
+//pages is a vector thus we can utilize a resize function for intialization
+    tableSize = num_pages;
+    pages.resize(num_pages);
 }
 
 // Destructor
 // TODO: Add your code
 PageTable::~PageTable() {
-    
+    delete [] &pages;
 }
