@@ -17,6 +17,8 @@ Replacement::Replacement(int num_pages, int num_frames)
 : page_table(num_pages)
 {
 	//TODO: Add your implementation here
+    numPageFaults = 0;
+    numOfPageReplacements = 0;
 }
 
 // Destructor
@@ -30,7 +32,12 @@ Replacement::~Replacement()
 bool Replacement::access_page(int page_num, bool is_write)
 {
     // TODO: Add your implementation here
+
     // If the page is valid, it calls the touch_page function. 
+    if() 
+    {
+        touch_page(page_num)
+    }
     // If the page is not valid but free frames are available, it calls the load_page function.
     // If the page is not valid and there is no free frame, it calls the replace_page function.
     return false;
