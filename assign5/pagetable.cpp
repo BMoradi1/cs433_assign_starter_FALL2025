@@ -13,12 +13,14 @@
 // TODO: Add your implementation of PageTable
 // Constrcutor
 // TODO: Add your code
-PageTable::PageTable(int num_pages) {
-    
+PageTable::PageTable(int num_pages) 
+{
+    pages = std::vector<PageEntry>(num_pages);
 }
 
 // Destructor
 // TODO: Add your code
-PageTable::~PageTable() {
-    
+PageTable::~PageTable() 
+{
+   
 }
