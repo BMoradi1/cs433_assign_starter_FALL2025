@@ -10,9 +10,6 @@
 
 #include "pagetable.h"
 
-// TODO: Add your implementation of PageTable
-// Constrcutor
-// TODO: Add your code
 int tableSize;
 
 PageTable::PageTable(int num_pages) {
@@ -22,7 +19,6 @@ PageTable::PageTable(int num_pages) {
 }
 
 // Destructor
-// TODO: Add your code
 PageTable::~PageTable() {
     delete [] &pages;
 }
