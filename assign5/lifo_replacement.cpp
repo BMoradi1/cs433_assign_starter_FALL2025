@@ -24,7 +24,6 @@ LIFOReplacement::LIFOReplacement(int num_pages, int num_frames)
 {
     frameCountLIFO = num_frames;
     pageCountLIFO = num_pages;
-    printf("I am here");
     lastReplacedIndexLIFO = pageCountLIFO - 1;
     // TODO: Add additional implementation code
 }
@@ -46,7 +45,7 @@ int LIFOReplacement::replace_page(int page_num) {
 
     newPage.dirty = true;
     newPage.valid = false;
-    newPage.frame_num = page_num;
+    newPage.frame_num = lastReplacedIndexLIFO;
 
     page_table[lastReplacedIndexLIFO] = newPage;
 
