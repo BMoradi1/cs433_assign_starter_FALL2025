@@ -9,6 +9,7 @@
 // Remember to add sufficient and clear comments to your code
 
 #include "fifo_replacement.h"
+int lastReplacedIndex = 0;
 
 // TODO: Add your implementation here
 FIFOReplacement::FIFOReplacement(int num_pages, int num_frames)
@@ -25,11 +26,13 @@ FIFOReplacement::~FIFOReplacement() {
 // Access an invalid page, but free frames are available
 void FIFOReplacement::load_page(int page_num) {
     // TODO: Update your data structure FIFO replacement and pagetable
-
+    load_page(page_num);
 }
 
 // Access an invalid page and no free frames are available
 int FIFOReplacement::replace_page(int page_num) {
     // TODO: Update your data structure FIFO replacement and pagetable
-
+    PageEntry firstIn;
+    firstIn = page_table[0];
+    
 }
