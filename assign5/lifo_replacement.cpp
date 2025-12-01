@@ -11,19 +11,19 @@
 #include "lifo_replacement.h"
 
 //total page count
-int pageCount;
+int pageCountLIFO;
 //total frame count (size of  table)
-int frameCount;
+int frameCountLIFO;
 //last replaced index
-int lastReplacedIndex = pageCount - 1;
+int lastReplacedIndexLIFO = pageCountLIFO - 1;
 
 
 // TODO: Add your implementation here
 LIFOReplacement::LIFOReplacement(int num_pages, int num_frames)
 : Replacement(num_pages, num_frames)
 {
-    frameCount = num_frames;
-    pageCount = num_pages;
+    frameCountLIFO = num_frames;
+    pageCountLIFO = num_pages;
     // TODO: Add additional implementation code
 }
 
@@ -39,23 +39,23 @@ void LIFOReplacement::load_page(int page_num) {
 
 // Access an invalid page and no free frames are available
 int LIFOReplacement::replace_page(int page_num) {
-    PageEntry lastOut = page_table[lastReplacedIndex];
+    PageEntry lastOut = page_table[lastReplacedIndexLIFO];
     PageEntry newPage;
 
     newPage.dirty = true;
     newPage.valid = false;
     newPage.frame_num = page_num;
 
-    page_table[lastReplacedIndex] = newPage;
+    page_table[lastReplacedIndexLIFO] = newPage;
 
-    for(int i = 0; i < frameCount - 1; i++){
+    for(int i = 0; i < frameCountLIFO - 1; i++){
         page_table[i] = page_table[i + 1];
     }  
-    if (lastReplacedIndex == 0){
-        lastReplacedIndex = frameCount - 1;
+    if (lastReplacedIndexLIFO == 0){
+        lastReplacedIndexLIFO = frameCountLIFO - 1;
     }
     else{
-        lastReplacedIndex--;
+        lastReplacedIndexLIFO--;
     }
     return lastOut.frame_num;
 }
