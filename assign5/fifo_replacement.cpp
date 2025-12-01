@@ -34,6 +34,7 @@ FIFOReplacement::~FIFOReplacement() {
 void FIFOReplacement::load_page(int page_num) {
     // TODO: Update your data structure FIFO replacement and pagetable
     //load_page(page_num);
+    
 }
 
 // Access an invalid page and no free frames are available
