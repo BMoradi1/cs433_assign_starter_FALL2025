@@ -15,7 +15,7 @@ int pageCountLIFO;
 //total frame count (size of  table)
 int frameCountLIFO;
 //last replaced index
-int lastReplacedIndexLIFO = pageCountLIFO - 1;
+int lastReplacedIndexLIFO;
 
 
 // TODO: Add your implementation here
@@ -24,6 +24,8 @@ LIFOReplacement::LIFOReplacement(int num_pages, int num_frames)
 {
     frameCountLIFO = num_frames;
     pageCountLIFO = num_pages;
+    printf("I am here");
+    lastReplacedIndexLIFO = pageCountLIFO - 1;
     // TODO: Add additional implementation code
 }
 

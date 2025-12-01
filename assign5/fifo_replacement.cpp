@@ -20,6 +20,8 @@ int frameCount;
 FIFOReplacement::FIFOReplacement(int num_pages, int num_frames)
 : Replacement(num_pages, num_frames)
 {
+    pageCount = num_pages;
+    frameCount = num_frames;
     // TODO: Add additional implementation code
 }
 
@@ -31,7 +33,7 @@ FIFOReplacement::~FIFOReplacement() {
 // Access an invalid page, but free frames are available
 void FIFOReplacement::load_page(int page_num) {
     // TODO: Update your data structure FIFO replacement and pagetable
-    load_page(page_num);
+    //load_page(page_num);
 }
 
 // Access an invalid page and no free frames are available
@@ -43,7 +45,6 @@ int FIFOReplacement::replace_page(int page_num) {
     newPage.dirty = true;
     newPage.valid = false;
     newPage.frame_num = page_num;
-
     page_table[0] = newPage;
 
     for(int i = 0; i < frameCount - 1; i++){
@@ -55,5 +56,5 @@ int FIFOReplacement::replace_page(int page_num) {
     else{
         lastReplacedIndex++;
     }
-    
+    return firstIn.frame_num;
 }

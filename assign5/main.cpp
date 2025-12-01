@@ -79,6 +79,7 @@ int main(int argc, char *argv[]) {
     // Create a vector to store the logical addresses
     std::vector<int> small_refs;
     while (in >> val) {
+       //cout << "Hello";
         small_refs.push_back(val);
     }
     // Create a virtual memory simulation using FIFO replacement algorithm
