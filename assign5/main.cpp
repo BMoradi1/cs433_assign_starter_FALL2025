@@ -25,15 +25,15 @@ int main(int argc, char *argv[]) {
     std::cout << "Course: CS433 (Operating Systems)" << std::endl;
     std::cout << "Description : Program to simulate different page replacement algorithms" << std::endl;
     std::cout << "=================================================================\n" << std::endl;
-    argv[1] = (char*)"4";
-    argv[2] = (char*)"256";
+    //argv[1] = (char*)"4";
+   // argv[2] = (char*)"256";
     if (argc < 3) {
         // user does not enter enough parameters
         std::cout << "You have entered too few parameters to run the program.  You must enter" << std::endl
                   << "two command-line arguments:" << std::endl
                   << " - page size (in bytes): between 256 and 8192, inclusive" << std::endl
                   << " - physical memory size (in megabytes): between 4 and 64, inclusive" << std::endl;
-        //exit(1);
+        exit(1);
     }
 
     // Page size and Physical memory size
