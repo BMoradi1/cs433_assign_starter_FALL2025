@@ -21,6 +21,7 @@ FIFOReplacement::FIFOReplacement(int num_pages, int num_frames)
 : Replacement(num_pages, num_frames)
 {
     // TODO: Add additional implementation code
+    frameCount = 0;
 }
 
 // TODO: Add your implementations for desctructor, load_page, replace_page here
@@ -35,7 +36,6 @@ void FIFOReplacement::load_page(int page_num) {
 
     newPage.dirty = true;
     newPage.valid = false;
-
     newPage.frame_num = frameCount;
     page_table[frameCount] = newPage;
     frameCount++;

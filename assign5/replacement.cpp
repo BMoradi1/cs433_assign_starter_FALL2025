@@ -48,7 +48,9 @@ bool Replacement::access_page(int page_num, bool is_write)
     // If the page is not valid but free frames are available, it calls the load_page function.
     if(page_table[page_num].valid == false && free_frames > 0){
         load_page(page_num);
+        page_table[page_num].frame_num=free_frames;
         free_frames--;
+        numPageFaults++;
         return true;
     }
     // If the page is not valid and there is no free frame, it calls the replace_page function.
@@ -56,6 +58,7 @@ bool Replacement::access_page(int page_num, bool is_write)
     {
         replace_page(page_num);
         numReplacements++;
+        numPageFaults++;
         return true;
 
     }
