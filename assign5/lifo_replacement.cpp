@@ -45,9 +45,9 @@ int LIFOReplacement::replace_page(int page_num) {
 
     newPage.dirty = true;
     newPage.valid = false;
-    newPage.frame_num = lastReplacedIndexLIFO;
+    newPage.frame_num = frameCountLIFO;
 
-    page_table[lastReplacedIndexLIFO] = newPage;
+    page_table[frameCountLIFO] = newPage;
 
     for(int i = 0; i < frameCountLIFO - 1; i++){
         page_table[i] = page_table[i + 1];
