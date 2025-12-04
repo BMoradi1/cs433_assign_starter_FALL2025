@@ -71,6 +71,6 @@ bool Replacement::access_page(int page_num, bool is_write)
 void Replacement::print_statistics() const {
         // TODO: print out the number of references, number of page faults and number of page replacements
 		std::cout << "Number of references: \t\t"  << std::endl;
-		std::cout << "Number of page faults: \t\t" << std::endl;
-		std::cout << "Number of page replacements: \t"  << std::endl;
+		std::cout << "Number of page faults: \t\t" << numPageFaults << std::endl;
+		std::cout << "Number of page replacements: \t" << numReplacements << std::endl;
 }
