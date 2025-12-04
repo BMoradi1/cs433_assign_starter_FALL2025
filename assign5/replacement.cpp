@@ -1,7 +1,7 @@
 /**
 * Assignment 5: Page replacement algorithms
  * @file replacement.cpp
- * @author ??? (TODO: your name)
+ * @author Brynn Grofcsik  and Bijan Moradi (TODO: your name)
  * @brief A base class for different page replacement algorithms.
  * @version 0.1
  */
@@ -16,6 +16,7 @@ int numPageFaults;
 int numReplacements;
 int free_frames;
 int current_frame;
+int numberOfReferences;
 
 // Constructor
 Replacement::Replacement(int num_pages, int num_frames)
@@ -39,7 +40,7 @@ Replacement::~Replacement()
 bool Replacement::access_page(int page_num, bool is_write)
 {
     // TODO: Add your implementation here
-
+    numberOfReferences++;
     // If the page is valid, it calls the touch_page function. 
     if(page_table[page_num].valid == true) 
     {
@@ -49,7 +50,8 @@ bool Replacement::access_page(int page_num, bool is_write)
     // If the page is not valid but free frames are available, it calls the load_page function.
     if(page_table[page_num].valid == false && free_frames > 0){
         load_page(page_num);
-        page_table[page_num].frame_num=current_frame;
+        page_table[page_num].frame_num=current_frame; //page loaded into frame and its now a valid page
+        page_table[page_num].valid = true; //set as valid
         current_frame++;
         free_frames--;
         numPageFaults++;
@@ -70,7 +72,7 @@ bool Replacement::access_page(int page_num, bool is_write)
 // Print out statistics of simulation
 void Replacement::print_statistics() const {
         // TODO: print out the number of references, number of page faults and number of page replacements
-		std::cout << "Number of references: \t\t"  << std::endl;
+		std::cout << "Number of references: \t\t" << numberOfReferences << std::endl;
 		std::cout << "Number of page faults: \t\t" << numPageFaults << std::endl;
 		std::cout << "Number of page replacements: \t" << numReplacements << std::endl;
 }

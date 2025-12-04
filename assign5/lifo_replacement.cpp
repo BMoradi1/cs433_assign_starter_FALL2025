@@ -1,7 +1,7 @@
 /**
 * Assignment 5: Page replacement algorithms
  * @file lifo_replacement.cpp
- * @author ??? (TODO: your name)
+ * @author Brynn Grofcsik  and Bijan Moradi (TODO: your name)
  * @brief A class implementing the Last in First Out (LIFO) page replacement algorithms
  * @version 0.1
  */
