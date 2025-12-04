@@ -22,41 +22,42 @@ int lastReplacedIndexLIFO;
 LIFOReplacement::LIFOReplacement(int num_pages, int num_frames)
 : Replacement(num_pages, num_frames)
 {
-    frameCountLIFO = num_frames;
-    pageCountLIFO = num_pages;
-    lastReplacedIndexLIFO = pageCountLIFO - 1;
     // TODO: Add additional implementation code
 }
 
-// TODO: Add your implementations for desctructor, load_page, replace_page here
 LIFOReplacement::~LIFOReplacement() {
     // TODO: Add necessary code here
 }
 
 // Access an invalid page, but free frames are available
 void LIFOReplacement::load_page(int page_num) {
-    load_page(page_num);
+    //inputed page's frame number will be set to the next avaliable frame in stack (current frame pulled from replacement)
+    page_table[page_num].frame_num = current_frame;
+    //page_num now set valid since it's data is accessible now
+    page_table[page_num].valid = true;  
+
+    //push page to top of stack
+    lifo_stack.push(page_num);
 }
 
 // Access an invalid page and no free frames are available
 int LIFOReplacement::replace_page(int page_num) {
-    PageEntry lastOut = page_table[lastReplacedIndexLIFO];
-    PageEntry newPage;
 
-    newPage.dirty = true;
-    newPage.valid = false;
-    newPage.frame_num = frameCountLIFO;
+    //our victim page will be at the top of the lifo stack, so we'll pop it
+    int victim_page = lifo_stack.top();
+    lifo_stack.pop();
 
-    page_table[frameCountLIFO] = newPage;
+    //grab our victim frame for new page and set it's valid status to false
+    int victim_frame = page_table[victim_page].frame_num;
+    page_table[victim_page].valid = false;
+    
+    //replace victim page with new page
+    page_table[page_num].frame_num = victim_frame;
+    page_table[page_num].valid = true;
 
-    for(int i = 0; i < frameCountLIFO - 1; i++){
-        page_table[i] = page_table[i + 1];
-    }  
-    if (lastReplacedIndexLIFO == 0){
-        lastReplacedIndexLIFO = frameCountLIFO - 1;
-    }
-    else{
-        lastReplacedIndexLIFO--;
-    }
-    return lastOut.frame_num;
+    //push new page to the top of stack
+    lifo_stack.push(page_num);
+
+    //return the victim page num
+    return victim_page;
 }

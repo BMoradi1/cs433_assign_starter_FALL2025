@@ -21,6 +21,11 @@ class Replacement
 protected:      // subclasses can access these members
     // Member variable for the page table
     PageTable page_table;
+    int numPageFaults;
+    int numReplacements;
+    int free_frames;
+    int current_frame;
+    int numberOfReferences;
 	// TODO: Add additional member variables to this class
 	
 public:

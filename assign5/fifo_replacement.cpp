@@ -9,57 +9,47 @@
 // Remember to add sufficient and clear comments to your code
 
 #include "fifo_replacement.h"
-//total page count
-int pageCount;
-//total frame count (size of  table)
-int frameCount;
-int totalFrames;
 
 
 // TODO: Add your implementation here
 FIFOReplacement::FIFOReplacement(int num_pages, int num_frames)
 : Replacement(num_pages, num_frames)
 {
-    pageCount = num_pages;
-    totalFrames = num_frames;
-    frameCount = 0;
+  
     // TODO: Add additional implementation code
-    frameCount = 0;
 }
 
-// TODO: Add your implementations for desctructor, load_page, replace_page here
 FIFOReplacement::~FIFOReplacement() {
     // TODO: Add necessary code here
 }
 
 // Access an invalid page, but free frames are available
 void FIFOReplacement::load_page(int page_num) {
-    // TODO: Update your data structure FIFO replacement and pagetable
-    PageEntry newPage = PageEntry();
+    //set new page's frame num to the next currently avaliable (current_frame pulled from replacement)
+    page_table[page_num].frame_num = current_frame; 
+    //set valid status to true
+    page_table[page_num].valid = true; 
 
-    newPage.dirty = true;
-    newPage.valid = false;
-    newPage.frame_num = frameCount;
-
-    page_table[frameCount] = newPage;
-    frameCount++;
+    //push page num into the back of the fifo queue 
+    fifo_queue.push(page_num);
 }
 
 // Access an invalid page and no free frames are available
 int FIFOReplacement::replace_page(int page_num) {
-    // TODO: Update your data structure FIFO replacement and pagetable
-    PageEntry firstIn = page_table[0];
-    PageEntry newPage;
+    //since this is FIFO, our victim page is the first in queue
+    int victim_page = fifo_queue.front();
+    fifo_queue.pop();
 
-    newPage.dirty = true;
-    newPage.valid = false;
-    newPage.frame_num = 0;
+    //grab our victim page's frame num since we'll be using it and set its valid status to false
+    int victim_frame = page_table[victim_page].frame_num;
+    page_table[victim_page].valid = false;
 
-    for(int i = 0; i < frameCount - 1; i++){
-        page_table[i] = page_table[i + 1];
-    }
+    //set our page's frame num as the victim's frame num and set its valid status to true
+    page_table[page_num].frame_num = victim_frame;
+    page_table[page_num].valid = true;
 
-    page_table[frameCount - 1] = newPage;
+    //push new page to back of stack
+    fifo_queue.push(page_num);
 
-    return firstIn.frame_num;
+    return victim_page;
 }

@@ -13,13 +13,16 @@
 // Remember to add comments to your code
 
 #include "replacement.h"
+#include <queue>
+
 
 /**
  * @brief A class to simulate FIFO page replacement algorithm.
  */
 class FIFOReplacement : public Replacement {
 private:
-    // TODO: Add necessary member variables to this class
+    // Queue to store the order of pages
+    std::queue<int> fifo_queue;
 
 public:
     /**

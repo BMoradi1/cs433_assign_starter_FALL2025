@@ -97,17 +97,48 @@ int main(int argc, char *argv[]) {
 
     // Test 2: Read and simulate the large list of logical addresses from the input file "large_refs.txt"
     std::cout << "\n================================Test 2==================================================\n";
+    in.open("large_refs.txt");
+    if (!in.is_open()) {
+        std::cerr << "Cannot open large_refs.txt to read. Please check your path." << std::endl;
+        return 1;
+    }
+    std::vector<int> largeFIFO;
+    std::vector<int> largeLIFO;
+    std::vector<int> largeLRU;
+
+    while (in >> val) {
+        largeFIFO.push_back(val);
+        largeLIFO.push_back(val);
+        largeLRU.push_back(val);
+    }
 
     std::cout << "****************Simulate FIFO replacement****************************" << std::endl;
     // TODO: Add your code to calculate number of page faults using FIFO replacement algorithm
+
+    FIFOReplacement ff(num_pages, num_frames);
+
+    for (size_t i = 0; i < largeFIFO.size(); i++) {
+         int page_num = largeFIFO[i] >> page_offset_bits; 
+        ff.access_page(page_num, false);
+    }      
     // TODO: print the statistics and run-time
+    ff.print_statistics();
 
     std::cout << "****************Simulate LIFO replacement****************************" << std::endl;
     // TODO: Add your code to calculate number of page faults using LIFO replacement algorithm
+    LIFOReplacement lf(num_pages, num_frames);
+
+    for (size_t i = 0; i < largeLIFO.size(); i++) {
+         int page_num = largeLIFO[i] >> page_offset_bits; 
+        lf.access_page(page_num, false);
+    }    
     // TODO: print the statistics and run-time
+    lf.print_statistics();
 
     std::cout << "****************Simulate LRU replacement****************************" << std::endl;
     // TODO: Add your code to calculate number of page faults using LRU replacement algorithm
     // TODO: print the statistics and run-time
+
+    in.close();
 
 }
