@@ -10,15 +10,11 @@
 
 #include "pagetable.h"
 
-int tableSize;
-
 PageTable::PageTable(int num_pages) {
-//pages is a vector thus we can utilize a resize function for intialization
-    tableSize = num_pages;
+    // Initialize the underlying vector to hold `num_pages` entries
     pages.resize(num_pages);
 }
 
-// Destructor
+// Destructor: rely on vector's automatic cleanup. Do NOT delete the vector's address.
 PageTable::~PageTable() {
-    delete [] &pages;
 }
