@@ -1,11 +1,15 @@
 // Remember to add comments to your code
 
+
+//https://www.geeksforgeeks.org/cpp/measure-execution-time-function-cpp/
+
+
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
 #include <cmath>
 #include <vector>
-
+#include <chrono>
 #include "fifo_replacement.h"
 #include "lru_replacement.h"
 #include "lifo_replacement.h"
@@ -124,6 +128,7 @@ int main(int argc, char *argv[]) {
     // TODO: print the statistics and run-time
     ff.print_statistics();
 
+
     std::cout << "****************Simulate LIFO replacement****************************" << std::endl;
     // TODO: Add your code to calculate number of page faults using LIFO replacement algorithm
     LIFOReplacement lf(num_pages, num_frames);
@@ -138,7 +143,13 @@ int main(int argc, char *argv[]) {
     std::cout << "****************Simulate LRU replacement****************************" << std::endl;
     // TODO: Add your code to calculate number of page faults using LRU replacement algorithm
     // TODO: print the statistics and run-time
+    LRUReplacement lu(num_pages, num_frames);
 
+    for (size_t i = 0; i < largeLRU.size(); i++) {
+        int page_num = largeLRU[i] >> page_offset_bits; 
+        lu.access_page(page_num, false);
+    }    
+    lu.print_statistics();
     in.close();
 
 }
