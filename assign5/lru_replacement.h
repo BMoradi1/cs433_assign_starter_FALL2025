@@ -19,7 +19,19 @@
  */
 class LRUReplacement : public Replacement
 {
-	// TODO: Add your implementation to this class
+	struct Node {
+        int pageNum;
+        int value;
+        Node *next;
+        Node *prev;
+
+        Node(int p, int v){
+            pageNum = p;
+            value = v;
+            next = nullptr;
+            prev = nullptr;
+        }
+};
 public:
 	/**
 	 * @brief Constructor

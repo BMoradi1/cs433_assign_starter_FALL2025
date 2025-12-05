@@ -9,12 +9,25 @@
 // Remember to add sufficient and clear comments to your code
 
 #include "lru_replacement.h"
+#include <bits/stdc++.h>
+int capacity;
+
 
 // TODO: Add your implementation here
 LRUReplacement::LRUReplacement(int num_pages, int num_frames)
 : Replacement(num_pages, num_frames)
 {
-    // TODO: Complete this constructor
+free_frames = num_frames;
+unordered_map<int, Node*> Map;
+Node *head;
+Node *tail;
+
+capacity = num_pages;
+head = new Node(-1, -1);
+tail = new Node(-1, -1);
+head-> next = tail;
+tail-> prev = head;
+
 }
 
 // TODO: Add your implementations for desctructor, touch_page, load_page, replace_page here
@@ -26,12 +39,16 @@ LRUReplacement::~LRUReplacement()
 // Accesss a page alreay in physical memory
 void LRUReplacement::touch_page(int page_num)
 {
-    // TODO: Update your data structure LRU replacement
+
 }
 
 // Access an invalid page, but free frames are available
 void LRUReplacement::load_page(int page_num) {
-    // TODO: Update your data structure LRU replacement and pagetable
+//inputed page's frame number will be set to the next avaliable frame in stack (current frame pulled from replacement)
+    page_table[page_num].frame_num = current_frame;
+    //page_num now set valid since it's data is accessible now
+    page_table[page_num].valid = true;  
+    // TODO: Update your data structure LRU replacement}
 }
 
 // Access an invalid page and no free frames are available
