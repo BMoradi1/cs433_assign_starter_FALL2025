@@ -100,6 +100,7 @@ int main(int argc, char *argv[]) {
     vm.print_statistics();
 
     // Test 2: Read and simulate the large list of logical addresses from the input file "large_refs.txt"
+    
     std::cout << "\n================================Test 2==================================================\n";
     in.open("large_refs.txt");
     if (!in.is_open()) {
@@ -120,36 +121,45 @@ int main(int argc, char *argv[]) {
     // TODO: Add your code to calculate number of page faults using FIFO replacement algorithm
 
     FIFOReplacement ff(num_pages, num_frames);
-
+    auto start = chrono::high_resolution_clock::now();
     for (size_t i = 0; i < largeFIFO.size(); i++) {
          int page_num = largeFIFO[i] >> page_offset_bits; 
         ff.access_page(page_num, false);
     }      
+    auto end  = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration<double>(end - start);
     // TODO: print the statistics and run-time
     ff.print_statistics();
+    cout<<"Elapsed time = " << duration.count() << " seconds" << endl;
 
 
     std::cout << "****************Simulate LIFO replacement****************************" << std::endl;
     // TODO: Add your code to calculate number of page faults using LIFO replacement algorithm
     LIFOReplacement lf(num_pages, num_frames);
-
+    start = chrono::high_resolution_clock::now();
     for (size_t i = 0; i < largeLIFO.size(); i++) {
          int page_num = largeLIFO[i] >> page_offset_bits; 
         lf.access_page(page_num, false);
     }    
+    end  = chrono::high_resolution_clock::now();
+    duration = chrono::duration<double>(end - start);
     // TODO: print the statistics and run-time
     lf.print_statistics();
+    cout<<"Elapsed time = " << duration.count() << " seconds" << endl;
 
     std::cout << "****************Simulate LRU replacement****************************" << std::endl;
     // TODO: Add your code to calculate number of page faults using LRU replacement algorithm
     // TODO: print the statistics and run-time
     LRUReplacement lu(num_pages, num_frames);
-
+    start = chrono::high_resolution_clock::now();
     for (size_t i = 0; i < largeLRU.size(); i++) {
         int page_num = largeLRU[i] >> page_offset_bits; 
         lu.access_page(page_num, false);
     }    
+    end  = chrono::high_resolution_clock::now();
+    duration = chrono::duration<double>(end - start);
     lu.print_statistics();
+    cout<<"Elapsed time = " << duration.count() << " seconds" << endl;
     in.close();
 
 }
