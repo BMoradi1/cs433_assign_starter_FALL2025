@@ -15,26 +15,19 @@
 #include "replacement.h"
 #include <list>
 #include <utility>
+#include <unordered_map>
+#include <vector>
+
 /**
  * @brief A class to simulate the least recently used (LRU) page replacement algorithm.
  */
 class LRUReplacement : public Replacement
 {
-	struct Node {
-        int pageNum;
-        int value;
-        Node *next;
-        Node *prev;
-
-        Node(int p, int v){
-            pageNum = p;
-            value = v;
-            next = nullptr;
-            prev = nullptr;
-        }
-};
+	
 public:
     std::list<int> lruList;
+    std::unordered_map<int, std::list<int>::iterator> lruMap;
+    std::vector<int> free_frames;
     
 	/**
 	 * @brief Constructor

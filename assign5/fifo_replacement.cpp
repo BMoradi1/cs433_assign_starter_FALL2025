@@ -20,7 +20,9 @@ FIFOReplacement::FIFOReplacement(int num_pages, int num_frames)
 }
 
 FIFOReplacement::~FIFOReplacement() {
-    // TODO: Add necessary code here
+    while (!fifo_queue.empty()) {   
+        fifo_queue.pop();  
+    }
 }
 
 // Access an invalid page, but free frames are available

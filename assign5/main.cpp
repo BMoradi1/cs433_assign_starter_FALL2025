@@ -118,7 +118,6 @@ int main(int argc, char *argv[]) {
     }
 
     std::cout << "****************Simulate FIFO replacement****************************" << std::endl;
-    // TODO: Add your code to calculate number of page faults using FIFO replacement algorithm
 
     FIFOReplacement ff(num_pages, num_frames);
     auto start = chrono::high_resolution_clock::now();
@@ -128,13 +127,13 @@ int main(int argc, char *argv[]) {
     }      
     auto end  = chrono::high_resolution_clock::now();
     auto duration = chrono::duration<double>(end - start);
-    // TODO: print the statistics and run-time
+
     ff.print_statistics();
     cout<<"Elapsed time = " << duration.count() << " seconds" << endl;
 
 
     std::cout << "****************Simulate LIFO replacement****************************" << std::endl;
-    // TODO: Add your code to calculate number of page faults using LIFO replacement algorithm
+
     LIFOReplacement lf(num_pages, num_frames);
     start = chrono::high_resolution_clock::now();
     for (size_t i = 0; i < largeLIFO.size(); i++) {
@@ -143,23 +142,29 @@ int main(int argc, char *argv[]) {
     }    
     end  = chrono::high_resolution_clock::now();
     duration = chrono::duration<double>(end - start);
-    // TODO: print the statistics and run-time
+
     lf.print_statistics();
     cout<<"Elapsed time = " << duration.count() << " seconds" << endl;
 
     std::cout << "****************Simulate LRU replacement****************************" << std::endl;
-    // TODO: Add your code to calculate number of page faults using LRU replacement algorithm
-    // TODO: print the statistics and run-time
+
     LRUReplacement lu(num_pages, num_frames);
     start = chrono::high_resolution_clock::now();
     for (size_t i = 0; i < largeLRU.size(); i++) {
         int page_num = largeLRU[i] >> page_offset_bits; 
         lu.access_page(page_num, false);
     }    
-    end  = chrono::high_resolution_clock::now();
+    end = chrono::high_resolution_clock::now();
     duration = chrono::duration<double>(end - start);
     lu.print_statistics();
+
     cout<<"Elapsed time = " << duration.count() << " seconds" << endl;
+
     in.close();
 
+    largeFIFO.clear();
+    largeLIFO.clear();
+    largeLRU.clear();  
+
+    return 0;
 }

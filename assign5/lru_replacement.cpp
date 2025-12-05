@@ -18,52 +18,69 @@ int capacity;
 LRUReplacement::LRUReplacement(int num_pages, int num_frames)
 : Replacement(num_pages, num_frames)
 {
-    free_frames = num_frames;
-  /*   //unordered_map<int, Node*> Map;
-    Node *head;
-    Node *tail;
-
-    capacity = num_pages;
-    head = new Node(-1, -1);
-    tail = new Node(-1, -1);
-    head-> next = tail;
-    tail-> prev = head;
- */
+    for (int i = num_frames - 1; i >= 0; i--){
+        free_frames.push_back(i);
     }
+
+}
 
 // TODO: Add your implementations for desctructor, touch_page, load_page, replace_page here
 LRUReplacement::~LRUReplacement()
 {
     // TODO: Add necessary code here
+    lruList.clear();
+    lruMap.clear();
+    free_frames.clear();
+    
 }
 
 // Accesss a page alreay in physical memory
 void LRUReplacement::touch_page(int page_num)
 {
     //printf("hello");
-    for(auto it = lruList.begin(); it != lruList.end(); it++) //find where the page is inside our LRU order tracker
-    {
-        lruList.splice(lruList.begin(), lruList, it); //since we accessed it we move it to the top
-        break;
-    }
+     page_table[page_num].valid = true;
+
+     auto it = lruMap.find(page_num);
+     if(it == lruMap.end())
+        return;
+    
+    lruList.splice(lruList.begin(), lruList, it->second);
+    lruMap[page_num] = lruList.begin();
+
 }
 
 // Access an invalid page, but free frames are available
 void LRUReplacement::load_page(int page_num) {
-//inputed page's frame number will be set to the next avaliable frame in stack (current frame pulled from replacement)
-    page_table[page_num].frame_num = current_frame;
-    //page_num now set valid since it's data is accessible now
-    page_table[page_num].valid = true;  
-    // TODO: Update your data structure LRU replacement}
+    page_table[page_num].valid = false;
+
+    int frame = free_frames.back();
+    free_frames.pop_back();
+
+    page_table[page_num].frame_num = frame;
+    page_table[page_num].valid = true;
+
     lruList.push_front(page_num);
+    lruMap[page_num] = lruList.begin();
 }
 
 // Access an invalid page and no free frames are available
 int LRUReplacement::replace_page(int page_num) 
 {
+
     int victim = lruList.back();
-    // TODO: Update your data structure LRU replacement and pagetable
-    lruList.push_front(page_num);
+    int frame = page_table[victim].frame_num;
+
     lruList.pop_back();
+    lruMap.erase(victim);
+
+    page_table[victim].valid = false;
+    page_table[victim].frame_num = -1;
+
+    page_table[page_num].frame_num = frame;
+    page_table[page_num].valid = true;
+
+    lruList.push_front(page_num);
+    lruMap[page_num] = lruList.begin();
+
     return victim;
 }
