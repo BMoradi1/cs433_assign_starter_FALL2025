@@ -10,14 +10,14 @@
 #include <iostream>
 #include "replacement.h"
 
-// TODO: Add your implementation of the Replacement member functions here
+
 
 
 // Constructor
 Replacement::Replacement(int num_pages, int num_frames)
 : page_table(num_pages)
 {
-	//TODO: Add your implementation here
+	
     numPageFaults = 0;
     numReplacements = 0;
     free_frames = num_frames;
@@ -29,14 +29,14 @@ Replacement::Replacement(int num_pages, int num_frames)
 // Destructor
 Replacement::~Replacement()
 {
-    // TOOD: Add your code here
+   
 }
 
 // Simulate a single page access 
 // @return true if it's a page fault
 bool Replacement::access_page(int page_num, bool is_write)
 {
-    // TODO: Add your implementation here
+    
     numberOfReferences++;
     // If the page is valid, it calls the touch_page function. 
     if(page_table[page_num].valid == true) 

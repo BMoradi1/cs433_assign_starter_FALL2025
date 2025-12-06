@@ -18,21 +18,23 @@ int frameCountLIFO;
 int lastReplacedIndexLIFO;
 
 
-// TODO: Add your implementation here
+
 LIFOReplacement::LIFOReplacement(int num_pages, int num_frames)
 : Replacement(num_pages, num_frames)
 {
-    // TODO: Add additional implementation code
+
 }
 
-LIFOReplacement::~LIFOReplacement() {
+LIFOReplacement::~LIFOReplacement() 
+{
     while (!lifo_stack.empty()) {   
         lifo_stack.pop();  
     }
 }
 
 // Access an invalid page, but free frames are available
-void LIFOReplacement::load_page(int page_num) {
+void LIFOReplacement::load_page(int page_num) 
+{
     //inputed page's frame number will be set to the next avaliable frame in stack (current frame pulled from replacement)
     page_table[page_num].frame_num = current_frame;
     //page_num now set valid since it's data is accessible now
@@ -43,7 +45,8 @@ void LIFOReplacement::load_page(int page_num) {
 }
 
 // Access an invalid page and no free frames are available
-int LIFOReplacement::replace_page(int page_num) {
+int LIFOReplacement::replace_page(int page_num) 
+{
 
     //our victim page will be at the top of the lifo stack, so we'll pop it
     int victim_page = lifo_stack.top();

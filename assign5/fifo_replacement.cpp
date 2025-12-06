@@ -11,12 +11,12 @@
 #include "fifo_replacement.h"
 
 
-// TODO: Add your implementation here
+
 FIFOReplacement::FIFOReplacement(int num_pages, int num_frames)
 : Replacement(num_pages, num_frames)
 {
   
-    // TODO: Add additional implementation code
+    
 }
 
 FIFOReplacement::~FIFOReplacement() {
