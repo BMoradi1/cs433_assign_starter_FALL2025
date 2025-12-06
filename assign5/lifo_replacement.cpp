@@ -27,9 +27,10 @@ LIFOReplacement::LIFOReplacement(int num_pages, int num_frames)
 
 LIFOReplacement::~LIFOReplacement() 
 {
-    while (!lifo_stack.empty()) {   
+    while (!lifo_stack.empty()) 
+    {   
         lifo_stack.pop();  
-    }
+    }//clear our lifo stack
 }
 
 // Access an invalid page, but free frames are available

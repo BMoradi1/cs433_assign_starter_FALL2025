@@ -41,7 +41,7 @@ void LRUReplacement::touch_page(int page_num)
 
      auto it = lruMap.find(page_num); //search thtough our LRU hash map and check if its in the map. Used because map allows a o(1) search 
      if(it == lruMap.end()) 
-       return;//we didn't find it, so return. shouldn't happen
+       return;//we didn't find it, so return so we dont splice. shouldn't happen
     
     lruList.splice(lruList.begin(), lruList, it->second); //we need to move the element at location page_num (corrisponding iterator) to the front of the LRU tracking list
     lruMap[page_num] = lruList.begin(); //store the iterator (location) of the page_number within the list in the hash map so we dont have to go through the whole list to find it

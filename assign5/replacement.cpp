@@ -61,8 +61,8 @@ bool Replacement::access_page(int page_num, bool is_write)
     if(page_table[page_num].valid == false && free_frames == 0)
     {
         replace_page(page_num);
-        numReplacements++;
-        numPageFaults++;
+        numReplacements++; //we had a page replacement
+        numPageFaults++; //we had a page fault
         return true;
 
     }
