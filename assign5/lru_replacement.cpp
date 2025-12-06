@@ -44,7 +44,7 @@ void LRUReplacement::touch_page(int page_num)
         return;
     
     lruList.splice(lruList.begin(), lruList, it->second); //we need to move the element at location page_num (corrisponding iterator) to the front of the LRU tracking list
-    lruMap[page_num] = lruList.begin();
+    lruMap[page_num] = lruList.begin(); //store the iterator (location) of the page_number within the list in the hash map so we dont have to go through the whole list to find it
 
 }
 
