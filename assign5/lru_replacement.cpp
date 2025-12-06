@@ -40,8 +40,8 @@ void LRUReplacement::touch_page(int page_num)
      page_table[page_num].valid = true; //set the new page as valid
 
      auto it = lruMap.find(page_num); //search thtough our LRU hash map and check if its in the map. Used because map allows a o(1) search 
-     if(it == lruMap.end()) //we didn't find it, so return
-        return;
+     if(it == lruMap.end()) 
+       return;//we didn't find it, so return. shouldn't happen
     
     lruList.splice(lruList.begin(), lruList, it->second); //we need to move the element at location page_num (corrisponding iterator) to the front of the LRU tracking list
     lruMap[page_num] = lruList.begin(); //store the iterator (location) of the page_number within the list in the hash map so we dont have to go through the whole list to find it
@@ -60,7 +60,7 @@ void LRUReplacement::load_page(int page_num)
     page_table[page_num].valid = true;
 
     lruList.push_front(page_num); //put it in the front because it is the most recently used page entry.
-    lruMap[page_num] = lruList.begin();
+    lruMap[page_num] = lruList.begin();//store the iterator (location) of the page_number within the list in the hash map so we dont have to go through the whole list to find it
 }
 
 // Access an invalid page and no free frames are available
@@ -80,7 +80,7 @@ int LRUReplacement::replace_page(int page_num)
     page_table[page_num].valid = true; //page entry is now valid
 
     lruList.push_front(page_num); //since it was just added, its now the most recently used so it goes to the top of our LRU linked
-    lruMap[page_num] = lruList.begin();
+    lruMap[page_num] = lruList.begin();//store the iterator (location) of the page_number within the list in the hash map so we dont have to go through the whole list to find it
 
     return victim;
 }
