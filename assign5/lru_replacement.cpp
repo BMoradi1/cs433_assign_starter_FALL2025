@@ -1,7 +1,7 @@
 /**
 * Assignment 5: Page replacement algorithms
  * @file lru_replacement.cpp
- * @author Brynn Grofcsik  and Bijan Moradi 
+ * @author Brynn Grofcsik  and Bijan Moradi
  * @brief A class implementing the LRU page replacement algorithms
  * @version 0.1
  */
@@ -14,82 +14,73 @@
 int capacity;
 
 
-// TODO: Add your implementation here
 LRUReplacement::LRUReplacement(int num_pages, int num_frames)
 : Replacement(num_pages, num_frames)
 {
-    for (int i = num_frames - 1; i >= 0; i--){
-        free_frames.push_back(i);
-    }
+    for (int i = num_frames - 1; i >= 0; i--)
+    {
+        free_frames_LRU.push_back(i); 
+    }//free_frames_LRU frame vector initialization
 
 }
 
-// TODO: Add your implementations for desctructor, touch_page, load_page, replace_page here
+
 LRUReplacement::~LRUReplacement()
 {
-    //deconstructor for our lists and map
+    //clear our datastructures
     lruList.clear();
     lruMap.clear();
-    free_frames.clear();
+    free_frames_LRU.clear();
     
 }
 
 // Accesss a page alreay in physical memory
 void LRUReplacement::touch_page(int page_num)
 {
-    //printf("hello");
-     page_table[page_num].valid = true;
+     page_table[page_num].valid = true; //set the new page as valid
 
-     //finds the page in the map
-     auto it = lruMap.find(page_num);
-     if(it == lruMap.end())
-        return;
+     auto it = lruMap.find(page_num); //search thtough our LRU hash map and check if its in the map. Used because map allows a o(1) search 
+     if(it == lruMap.end()) 
+       return;//we didn't find it, so return so we dont splice. shouldn't happen
     
-    //Moves the found page to the front of the list
-    lruList.splice(lruList.begin(), lruList, it->second);
-    //Updates page number's position in the map
-    lruMap[page_num] = lruList.begin();
+    lruList.splice(lruList.begin(), lruList, it->second); //we need to move the element at location page_num (corrisponding iterator) to the front of the LRU tracking list
+    lruMap[page_num] = lruList.begin(); //store the iterator (location) of the page_number within the list in the hash map so we dont have to go through the whole list to find it
 
 }
 
-// Access an invalid page, but free frames are available
-void LRUReplacement::load_page(int page_num) {
+// Access an invalid page, but free_frames_LRU frames are available
+void LRUReplacement::load_page(int page_num) 
+{
+    page_table[page_num].valid = false;
 
-    //grab a free frame and remove it from the free frame list
-    int frame = free_frames.back();
-    free_frames.pop_back();
-    
-    //set incoming page's frame num and valid status
-    page_table[page_num].frame_num = frame;
+    int frame = free_frames_LRU.back(); //grab  a free_frames_LRU frame
+    free_frames_LRU.pop_back(); //remove it from the free_frames_LRU frame vector as its now in use
+
+    page_table[page_num].frame_num = frame; //set our new page entry as valid and assign it a frame number
     page_table[page_num].valid = true;
 
-    //add page to front of list and map
-    lruList.push_front(page_num);
-    lruMap[page_num] = lruList.begin();
+    lruList.push_front(page_num); //put it in the front because it is the most recently used page entry.
+    lruMap[page_num] = lruList.begin();//store the iterator (location) of the page_number within the list in the hash map so we dont have to go through the whole list to find it
 }
 
-// Access an invalid page and no free frames are available
+// Access an invalid page and no free_frames_LRU frames are available
 int LRUReplacement::replace_page(int page_num) 
 {
-    //victim is the least recently used page at the back of the list
-    int victim = lruList.back();
+
+    int victim = lruList.back(); //victim is the tail of the LRU linked list
     int frame = page_table[victim].frame_num;
 
-    //removes victim from list and map
-    lruList.pop_back();
-    lruMap.erase(victim);
+    lruList.pop_back(); //remove it from the LRUList
+    lruMap.erase(victim); //remove the victim from our hashmap as it is no longer loaded into our memory
 
-    //sets victim page to invalid and frame num to -1
-    page_table[victim].valid = false;
+    page_table[victim].valid = false;  //no longer a valid page entry
     page_table[victim].frame_num = -1;
 
-    //sets new page's frame num to victim's frame num and valid status to true
-    page_table[page_num].frame_num = frame;
-    page_table[page_num].valid = true;
+    page_table[page_num].frame_num = frame; //new page entry assigned its framenumber
+    page_table[page_num].valid = true; //page entry is now valid
 
-    //adds new page to front of list and map
-    lruList.push_front(page_num);
-    lruMap[page_num] = lruList.begin();
+    lruList.push_front(page_num); //since it was just added, its now the most recently used so it goes to the top of our LRU linked
+    lruMap[page_num] = lruList.begin();//store the iterator (location) of the page_number within the list in the hash map so we dont have to go through the whole list to find it
 
     return victim;
 }

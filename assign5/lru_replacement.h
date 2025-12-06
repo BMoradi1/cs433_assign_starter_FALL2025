@@ -27,7 +27,7 @@ class LRUReplacement : public Replacement
 public:
     std::list<int> lruList;
     std::unordered_map<int, std::list<int>::iterator> lruMap;
-    std::vector<int> free_frames;
+    std::vector<int> free_frames_LRU;
     
 	/**
 	 * @brief Constructor
