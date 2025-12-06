@@ -1,7 +1,7 @@
 /**
 * Assignment 5: Page replacement algorithms
  * @file lifo_replacement.cpp
- * @author Brynn Grofcsik  and Bijan Moradi (TODO: your name)
+ * @author Brynn Grofcsik  and Bijan Moradi 
  * @brief A class implementing the Last in First Out (LIFO) page replacement algorithms
  * @version 0.1
  */
@@ -27,10 +27,11 @@ LIFOReplacement::LIFOReplacement(int num_pages, int num_frames)
 
 LIFOReplacement::~LIFOReplacement() 
 {
+    //simple stack deconstructor
     while (!lifo_stack.empty()) 
     {   
         lifo_stack.pop();  
-    }//clear our lifo stack
+    }
 }
 
 // Access an invalid page, but free frames are available

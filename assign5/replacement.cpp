@@ -1,7 +1,7 @@
 /**
 * Assignment 5: Page replacement algorithms
  * @file replacement.cpp
- * @author Brynn Grofcsik  and Bijan Moradi (TODO: your name)
+ * @author Brynn Grofcsik  and Bijan Moradi 
  * @brief A base class for different page replacement algorithms.
  * @version 0.1
  */

@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
     std::cout << "=================================================================" << std::endl;
     std::cout << "CS 433 Programming assignment 5" << std::endl;
     std::cout << "Author: Brynn Grofcsik  and Bijan Moradi" << std::endl;
-    std::cout << "Date: xx/xx/20xx" << std::endl;
+    std::cout << "Date: 12/05/2025" << std::endl;
     std::cout << "Course: CS433 (Operating Systems)" << std::endl;
     std::cout << "Description : Program to simulate different page replacement algorithms" << std::endl;
     std::cout << "=================================================================\n" << std::endl;
@@ -107,10 +107,13 @@ int main(int argc, char *argv[]) {
         std::cerr << "Cannot open large_refs.txt to read. Please check your path." << std::endl;
         return 1;
     }
+
+    //Create 3 vectors to store the logical addresses for each algorithm
     std::vector<int> largeFIFO;
     std::vector<int> largeLIFO;
     std::vector<int> largeLRU;
 
+    //Grab logical addresses from file
     while (in >> val) {
         largeFIFO.push_back(val);
         largeLIFO.push_back(val);
@@ -160,8 +163,10 @@ int main(int argc, char *argv[]) {
 
     cout<<"Elapsed time = " << duration.count() << " seconds" << endl;
 
+    //Close the input file
     in.close();
 
+    //Clear the large reference vectors
     largeFIFO.clear();
     largeLIFO.clear();
     largeLRU.clear();  

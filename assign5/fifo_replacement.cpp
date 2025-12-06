@@ -1,7 +1,7 @@
 /**
 * Assignment 5: Page replacement algorithms
  * @file fifo_replacement.cpp
- * @author ??? (TODO: your name)
+ * @author Brynn Grofcsik and Bijan Moradi 
  * @brief A class implementing the FIFO page replacement algorithms
  * @version 0.1
  */
@@ -20,6 +20,7 @@ FIFOReplacement::FIFOReplacement(int num_pages, int num_frames)
 }
 
 FIFOReplacement::~FIFOReplacement() {
+    //simple queue deconstructor
     while (!fifo_queue.empty()) {   
         fifo_queue.pop();  
     }
